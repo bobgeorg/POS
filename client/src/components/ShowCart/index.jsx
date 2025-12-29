@@ -63,9 +63,9 @@ const ShowCart = () => {
             {context.cart.length > 0 &&
               <div className="cart-payment-total-price">
                 <p className="cart-payment-total-origin">
-                  {context.cart.reduce((total, curr) => {
+                  €{context.cart.reduce((total, curr) => {
                     return total += curr.quantity* curr.price;
-                  }, 0)} .000 Đ</p>
+                  }, 0).toFixed(2)}</p>
                 {/* <p className="cart-payment-total-tax">
                   (Incl.tax 10% = Kr 12.30)
                 </p> */}
@@ -73,7 +73,7 @@ const ShowCart = () => {
             }
           </div>
           <Link to={{ pathname: "/payment" , state: {cartcontext :context.cart }}}>
-          <button className="cart-payment-button">PAYMENT</button>
+          <button className="cart-payment-button">PLACE ORDER</button>
           </Link>
         </div>
       </div>

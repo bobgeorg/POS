@@ -65,6 +65,7 @@ const updateOrderToDelivered = async (req, res) => {
   if (order) {
     order.isDelivered = true
     order.deliveredAt = Date.now()
+    order.orderStatus = 'delivered'
 
     const updatedOrder = await order.save()
 
@@ -73,6 +74,55 @@ const updateOrderToDelivered = async (req, res) => {
     res.status(404)
     throw new Error('Order not found')
   }
+}
+
+// @desc    Update order status
+// @route   PUT /api/orders/:id/status
+// @access  Private/Admin
+const updateOrderStatus = async (req, res) => {
+  const { status } = req.body
+  const order = await Order.findById(req.params.id)
+
+  if (order) {
+    order.orderStatus = status
+
+    // Update timestamps based on status
+    if (status === 'preparing') {
+      order.preparedAt = Date.now()
+    } else if (status === 'ready') {
+      order.readyAt = Date.now()
+    } else if (status === 'delivered') {
+      order.isDelivered = true
+      order.deliveredAt = Date.now()
+    } else if (status === 'paid') {
+      order.isPaid = true
+      order.paidAt = Date.now()
+    }
+
+    const updatedOrder = await order.save()
+    res.json(updatedOrder)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
+}
+
+// @desc    Get orders by status
+// @route   GET /api/orders/status/:status
+// @access  Private
+const getOrdersByStatus = async (req, res) => {
+  const orders = await Order.find({ orderStatus: req.params.status }).sort({ createdAt: -1 })
+  res.json(orders)
+}
+
+// @desc    Get pending orders (for kitchen/bar)
+// @route   GET /api/orders/pending
+// @access  Private
+const getPendingOrders = async (req, res) => {
+  const orders = await Order.find({ 
+    orderStatus: { $in: ['pending', 'preparing'] } 
+  }).sort({ createdAt: 1 })
+  res.json(orders)
 }
 
 // // @desc    Get logged in user orders
@@ -96,5 +146,8 @@ module.exports = {
   getOrderById,
   updateOrderToPaid,
   updateOrderToDelivered,
+  updateOrderStatus,
+  getOrdersByStatus,
+  getPendingOrders,
   getOrders,
 }

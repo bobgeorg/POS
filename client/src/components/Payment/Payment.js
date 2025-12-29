@@ -104,22 +104,22 @@ const Payment = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = {
+    const orderData = {
       userName: ordername,
       usingMethod: orderusingMethod,
       totalPrice: total,
       OrderItems: ListItems,
+      tableseat: usingMethod === "Directly" ? table : null,
+      phone: usingMethod === "Online" ? number : null,
+      address: usingMethod === "Online" ? address : null,
+      orderStatus: 'pending', // Start as pending
     };
-    console.log("vcc", data);
+    console.log("Submitting order:", orderData);
     try {
       await axios
-        .post(`http://localhost:5000/api/orders/`, {
-          userName: ordername,
-          usingMethod: orderusingMethod,
-          totalPrice: total,
-          OrderItems: ListItems,
-        })
+        .post(`http://localhost:5000/api/orders/`, orderData)
         .then((res) => {
+          alert(`Order submitted successfully! Order ID: ${res.data._id}\nStatus: Pending - Your order has been sent to the kitchen/bar.`);
           history.push("/");
           console.log(res.data);
         })
@@ -137,14 +137,14 @@ const Payment = () => {
         <Form className="form-holder">
           <div className="form-content">
             <div className="form-items">
-              <h3>Payment Check</h3>
-              <p>Fill in the data below.</p>
+              <h3>Order Details</h3>
+              <p>Enter customer and table information.</p>
               <Form.Group controlId="exampleForm.ControlInput1">
-                <Form.Label>Tên</Form.Label>
+                <Form.Label>Customer Name</Form.Label>
                 <Form.Control
                   onChange={handlenameChange}
                   type="text"
-                  placeholder="Nguyễn Văn A"
+                  placeholder="John Doe"
                   value={name}
                 />
                 {nameerror ? (
@@ -154,7 +154,7 @@ const Payment = () => {
                 ) : null}
               </Form.Group>
               <Form.Group controlId="exampleForm.ControlTextarea1">
-                <Form.Label>Số bàn</Form.Label>
+                <Form.Label>Table Number</Form.Label>
                 <Form.Control
                   as="select"
                   value={table}
@@ -189,17 +189,17 @@ const Payment = () => {
         <Form className="form-holder">
           <div className="form-content">
             <div className="form-items">
-              <h3>Payment Check</h3>
-              <p>Fill in the data below.</p>
+              <h3>Delivery Details</h3>
+              <p>Enter customer and delivery information.</p>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
-                <Form.Label>Tên</Form.Label>
+                <Form.Label>Customer Name</Form.Label>
                 <Form.Control
                   onChange={handlenameChange}
                   type="text"
-                  placeholder="Nguyễn Văn A"
+                  placeholder="John Doe"
                   value={name}
                 />
                 {nameerror ? (
@@ -212,7 +212,7 @@ const Payment = () => {
                 className="mb-3"
                 controlId="exampleForm.ControlTextarea1"
               >
-                <Form.Label>Địa chỉ</Form.Label>
+                <Form.Label>Delivery Address</Form.Label>
                 <Form.Control
                   onChange={handleaddressChange}
                   type="text"
@@ -226,7 +226,7 @@ const Payment = () => {
                 ) : null}
               </Form.Group>
               <Form.Group controlId="exampleForm.ControlTextarea2">
-                <Form.Label>Số điện thoại</Form.Label>
+                <Form.Label>Phone Number</Form.Label>
                 <Form.Control
                   onChange={handlenumberChange}
                   type="text"
@@ -268,7 +268,7 @@ const Payment = () => {
                 })}
               </ul>
               <div className="payment-total-price">
-                Total Price: {total} .000 Đ
+                Total Price: €{total.toFixed(2)}
               </div>
               <div className="buttons-list">
                 <Button className="secondary" onClick={backState}>
@@ -343,14 +343,14 @@ const Payment = () => {
                 </div>
               ) : null}
               <div className="payment-total-price">
-                Total Price: {total} .000 Đ
+                Total Price: €{total.toFixed(2)}
               </div>
               <div className="buttons-list">
                 <Button className="secondary" onClick={backState}>
                   Back
                 </Button>
                 <Button className="primary" onClick={handleSubmit}>
-                  Submit
+                  Submit Order
                 </Button>
               </div>
             </div>

@@ -32,6 +32,12 @@ const OrderSchema = new Schema({
     required: true,
     default: 0.0,
   },
+  orderStatus: {
+    type: String,
+    required: true,
+    enum: ['pending', 'preparing', 'ready', 'delivered', 'paid'],
+    default: 'pending',
+  },
   isPaid: {
     type: Boolean,
     required: true,
@@ -48,6 +54,19 @@ const OrderSchema = new Schema({
   deliveredAt: {
     type: Date,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  preparedAt: {
+    type: Date,
+  },
+  readyAt: {
+    type: Date,
+  },
+},
+{
+  timestamps: true,
 })
 
 module.exports = mongoose.model('Order', OrderSchema)
