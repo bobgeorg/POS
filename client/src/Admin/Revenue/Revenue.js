@@ -30,15 +30,15 @@ export default function Revenue() {
     const choices = [
         {
             id: 1,
-            name: "Người gọi món"
+            name: "Customer Name"
         },
         {
             id: 2,
-            name: "Hình thức"
+            name: "Payment Method"
         },
         {
             id: 3,
-            name: "Đơn giá"
+            name: "Price"
         }
     ]
 
@@ -64,7 +64,7 @@ export default function Revenue() {
               <Row>
                 <Col lg={9}>
                   {" "}
-                  <h2><BiRestaurant className="iconManager"/>   Quản lí đơn hàng </h2>
+                  <h2><BiRestaurant className="iconManager"/>   Order Management </h2>
                 </Col>
                 <Col lg={3}>
                   {" "}
@@ -103,20 +103,23 @@ export default function Revenue() {
                 <div>
                     <Container className="showlist" fluid>
                         <Row>
-                            <Col sm={1.9}> <h2 className="columlist">Người gọi món</h2></Col>
-                            <Col sm={4.2}> <h2 className="columlist">Trạng thái</h2></Col>
-                            <Col sm={4.4}> <h2 className="columlist">Hình thức</h2></Col>
-                            <Col sm={1.3}> <h2 className="columlist">Đơn giá</h2></Col>
+                            <Col sm={1.5}> <h2 className="columlist">Customer</h2></Col>
+                            <Col sm={2}> <h2 className="columlist">Order Status</h2></Col>
+                            <Col sm={1.8}> <h2 className="columlist">Payment</h2></Col>
+                            <Col sm={3.2}> <h2 className="columlist">Payment Method</h2></Col>
+                            <Col sm={1.3}> <h2 className="columlist">Paid</h2></Col>
+                            <Col sm={1.3}> <h2 className="columlist">Unpaid</h2></Col>
+                            <Col sm={1.3}> <h2 className="columlist">Total</h2></Col>
                         </Row>
                     </Container>
                     <div className="contentlist_Revenue">
                         {renderSwitch(checked, current)}
                     </div>
-                    <div className="Total">Tổng doanh thu: {
+                    <div className="Total">Total Revenue: €{
                         Orders.reduce((sum, i) => (
                             sum += i.isPaid ? i.totalPrice : 0
                         ), 0).toLocaleString()
-                    }.000 VNĐ</div> 
+                    }</div> 
                 </div>
         </div>
         </>

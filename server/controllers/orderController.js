@@ -15,6 +15,8 @@ const addOrderItems = async (req, res) => {
       OrderItems,
       usingMethod,
       totalPrice,
+      unpaidValue: totalPrice,
+      paidValue: 0,
       userName,
     })
 
@@ -141,6 +143,67 @@ const getOrders = async (req, res) => {
   res.json(orders)
 }
 
+// @desc    Update order items
+// @route   PUT /api/orders/:id
+// @access  Private/Admin
+const updateOrderItems = async (req, res) => {
+  try {
+    console.log('Updating order items for order ID:', req.params.id);
+    console.log('Received OrderItems:', req.body.OrderItems);
+    console.log('Received isPaid:', req.body.isPaid);
+    
+    const { OrderItems, isPaid, paidAt } = req.body
+    const order = await Order.findById(req.params.id)
+
+    if (order) {
+      console.log('Order found, current items:', order.OrderItems);
+      console.log('Current paidValue:', order.paidValue, 'unpaidValue:', order.unpaidValue);
+      
+      // Update items if provided
+      if (OrderItems) {
+        const newTotalPrice = OrderItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
+        console.log('Old total price:', order.totalPrice, 'New total price:', newTotalPrice);
+        
+        order.OrderItems = OrderItems
+        order.totalPrice = newTotalPrice
+        
+        // Update unpaidValue: if order was paid, new items become unpaid
+        // unpaidValue = totalPrice - paidValue
+        order.unpaidValue = newTotalPrice - order.paidValue
+        console.log('Updated unpaidValue:', order.unpaidValue);
+      }
+      
+      // Update payment status if provided
+      if (isPaid !== undefined) {
+        if (isPaid && !order.isPaid) {
+          // Marking as paid: move unpaidValue to paidValue
+          order.paidValue += order.unpaidValue
+          order.unpaidValue = 0
+          console.log('Marked as paid. New paidValue:', order.paidValue);
+        } else if (!isPaid && order.isPaid) {
+          // Marking as unpaid: move everything to unpaidValue
+          order.unpaidValue = order.totalPrice
+          order.paidValue = 0
+          console.log('Marked as unpaid. New unpaidValue:', order.unpaidValue);
+        }
+        order.isPaid = isPaid
+        order.paidAt = paidAt || (isPaid ? Date.now() : null)
+      }
+      
+      const updatedOrder = await order.save()
+      console.log('Order saved successfully:', updatedOrder);
+      res.json(updatedOrder)
+    } else {
+      console.log('Order not found with ID:', req.params.id);
+      res.status(404)
+      throw new Error('Order not found')
+    }
+  } catch (error) {
+    console.error('Error in updateOrderItems:', error);
+    res.status(500).json({ message: error.message })
+  }
+}
+
 module.exports = {
   addOrderItems,
   getOrderById,
@@ -150,4 +213,5 @@ module.exports = {
   getOrdersByStatus,
   getPendingOrders,
   getOrders,
+  updateOrderItems,
 }

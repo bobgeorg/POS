@@ -5,7 +5,13 @@ export default function DetailOrder(props) {
     return (
         // if(items.length === props.order.listItemID.length) 
         props.order.OrderItems.map((item, index) => (
-            <ShowProduct order={item} indexx={index}/>
+            <ShowProduct 
+                key={index}
+                order={item} 
+                indexx={index}
+                onDelete={props.onDeleteItem}
+                onQuantityChange={props.onQuantityChange}
+            />
         ))
     )
 }

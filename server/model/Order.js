@@ -32,6 +32,16 @@ const OrderSchema = new Schema({
     required: true,
     default: 0.0,
   },
+  paidValue: {
+    type: Number,
+    required: true,
+    default: 0.0,
+  },
+  unpaidValue: {
+    type: Number,
+    required: true,
+    default: 0.0,
+  },
   orderStatus: {
     type: String,
     required: true,
