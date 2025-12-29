@@ -11,6 +11,15 @@ node_modules/
 
 # production
 /build
+client/build/
+
+# Visual Studio files
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
 # misc
 .DS_Store
