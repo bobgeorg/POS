@@ -14,7 +14,7 @@ import Revenue from './Admin/Revenue/Revenue'
 import KingOfFilter from './components/Header/KingOfFilter'
 
 function App() {
-  const [idType, setIdType] = useState(0)
+  const [idType, setIdType] = useState(-1)
   function ChangeForIdType(id) {
     setIdType(id)
   }

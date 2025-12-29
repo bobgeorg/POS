@@ -13,9 +13,9 @@ export default function Menu(props) {
         {(context) => (
           <Container>
             <Row>
-              {/* {Foods.filter(Food => Food.typeId == props.typeId || props.typeId == 0).map((Food, index) =>( */}
+              {/* {Foods.filter(Food => Food.typeId == props.typeId || props.typeId == -1).map((Food, index) =>( */}
               {props.Foods.filter(
-                (Food) => Food.catelory == props.type_id || props.typeId == 0).map((Food, index) => (
+                (Food) => Food.catelory == props.type_id || props.typeId == -1).map((Food, index) => (
                   <Col sm={3}>
                     <ShowCard
                       name={Food.name}
