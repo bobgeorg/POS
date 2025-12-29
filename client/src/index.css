@@ -198,6 +198,15 @@ code {
 
   color: red;
 }
+.sourmena-pos-icon {
+  display: inline-block;      /* icon behavior */
+  width: 40px;                /* typical icon size */
+  height: 40px;
+  background-image: url('./assets/water-tank.png'); /* or bundled path */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 .backtohome-title {
   display: inline-block;
   font-size: 30px;

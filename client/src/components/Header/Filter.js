@@ -65,8 +65,8 @@ const Filter = ({ x, Foods, Typess }) => {
   return (
     <>
       <div className="backtohome">
-        <i className="fas fa-home backtohome-icon"></i>
-        <h3 className="backtohome-title">Back to Home</h3>
+        <i className="sourmena-pos-icon"></i>
+        <h3 className="backtohome-title">Sourmena POS</h3>
       </div>
 
       {/* <div className="filter-food"> */}

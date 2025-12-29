@@ -1,7 +1,7 @@
 const Products = [
   {
     categoryName: 'Coffee',
-    categoryId: 0,
+    categoryId: 1,
     sku: '01',
     image: '',
     name: 'Freddo Espresso',
@@ -16,7 +16,7 @@ const Products = [
 
   {
     categoryName: 'Coffee',
-    categoryId: 0,
+    categoryId: 1,
     sku: '02',
     image: '',
     name: 'Freddo Cappuccino',
@@ -29,7 +29,7 @@ const Products = [
   },
   {
     categoryName: 'Coffee',
-    categoryId: 0,
+    categoryId: 1,
     sku: '03',
     image: '/image/bunrieu.jpg',
     name: 'Espresso',
@@ -42,7 +42,7 @@ const Products = [
   },
   {
     categoryName: 'Coffee',
-    categoryId: 0,
+    categoryId: 1,
     sku: '04',
     image: '',
     name: 'Double Espresso',
@@ -55,7 +55,7 @@ const Products = [
   },
   {
     categoryName: 'Coffee',
-    categoryId: 0,
+    categoryId: 1,
     sku: '06',
     image: '',
     name: 'Double Cappuccino',
@@ -69,7 +69,7 @@ const Products = [
   },
   {
     categoryName: 'Beers',
-    categoryId: 1,
+    categoryId: 2,
     sku: '07',
     image: '',
     name: 'Heineken',
@@ -82,7 +82,7 @@ const Products = [
   },
   {
     categoryName: 'Amstel',
-    categoryId: 1,
+    categoryId: 2,
     sku: '08',
     image: '',
     name: 'Amstel',
@@ -95,7 +95,7 @@ const Products = [
   },
   {
     categoryName: 'Beers',
-    categoryId: 1,
+    categoryId: 2,
     sku: '09',
     image: '',
     name: 'Kaizer',
@@ -109,7 +109,7 @@ const Products = [
   },
   {
     categoryName: 'Beers',
-    categoryId: 1,
+    categoryId: 2,
     sku: '10',
     image: '',
     name: 'Fisher',
@@ -122,7 +122,7 @@ const Products = [
   },
   {
     categoryName: 'Food',
-    categoryId: 2,
+    categoryId: 3,
     sku: '11',
     image: '',
     name: 'Pizza',
@@ -135,7 +135,7 @@ const Products = [
   },
   {
     categoryName: 'Food',
-    categoryId: 2,
+    categoryId: 3,
     sku: '12',
     image: '',
     name: 'Ntakos',
@@ -148,7 +148,7 @@ const Products = [
   },
   {
     categoryName: 'Food',
-    categoryId: 2,
+    categoryId: 3,
     sku: '13',
     image: '',
     name: 'Chicken Nuggets',
@@ -162,7 +162,7 @@ const Products = [
   },
   {
     categoryName: 'Food',
-    categoryId: 2,
+    categoryId: 3,
     sku: '14',
     image: '',
     name: 'Cretan platter with apaki',
@@ -176,7 +176,7 @@ const Products = [
   },
   {
     categoryName: 'Food',
-    categoryId: 2,
+    categoryId: 3,
     sku: '15',
     image: '',
     name: 'Sausage platter',
@@ -190,7 +190,7 @@ const Products = [
   },
   {
     categoryName: 'Drinks',
-    categoryId: 3,
+    categoryId: 4,
     sku: '16',
     image: '',
     name: 'Coca-Cola',
@@ -204,7 +204,7 @@ const Products = [
   },
   {
     categoryName: 'Drinks',
-    categoryId: 3,
+    categoryId: 4,
     sku: '17',
     image: '',
     name: 'Sprite',
@@ -218,7 +218,7 @@ const Products = [
   },
   {
     categoryName: 'Drinks',
-    categoryId: 3,
+    categoryId: 4,
     sku: '18',
     image: '',
     name: 'Orange Juice',
