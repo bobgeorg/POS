@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import Filter from './Filter';
 import ShowInforLine from '../ShowInforLine';
 import Menu from '../Menu';
@@ -11,11 +12,11 @@ export default function KingOfFilter(props) {
     const [Types, setType] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get("http://localhost:5000/revenue/food").then((response) => {
+        axios.get(`${API_BASE_URL}/ordermanagement/food`).then((response) => {
             setFood(response.data);
             // console.log("Foods..........", response.data);
         });
-        axios.get("http://localhost:5000/revenue/type").then((response) => {
+        axios.get(`${API_BASE_URL}/ordermanagement/type`).then((response) => {
             setType(response.data);
             // console.log("Types...............", response.data);
         });

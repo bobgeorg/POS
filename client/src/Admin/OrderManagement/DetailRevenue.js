@@ -5,8 +5,8 @@ import { FiXCircle } from 'react-icons/fi';
 import { FcOk } from "react-icons/fc";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import DetailOrder from './DetailOrder';
-
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 
 const contentStyle = {
     height: "80%",
@@ -37,7 +37,7 @@ export default function DetailRevenue(props) {
     // Fetch available products when modal opens
     React.useEffect(() => {
         if (isOpen) {
-            axios.get("http://localhost:5000/revenue/food").then((response) => {
+            axios.get(`${API_BASE_URL}/ordermanagement/food`).then((response) => {
                 setAvailableProducts(response.data);
             });
         }
@@ -46,7 +46,7 @@ export default function DetailRevenue(props) {
     const ConfirmOrder = (order => {   
         const getData = async (order) => {  
             console.log(order._id)
-            await axios.post("http://localhost:5000/revenue/confirm", {idd: order._id}).then((response) => {
+            await axios.post(`${API_BASE_URL}/ordermanagement/confirm`, {idd: order._id}).then((response) => {
                 // setproduct(response.data)
                 console.log(response.data);
             });
@@ -56,7 +56,7 @@ export default function DetailRevenue(props) {
 
     const updateOrderStatus = async (orderId, newStatus) => {
         try {
-            await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, {
+            await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, {
                 status: newStatus
             });
             console.log(`Order status updated to: ${newStatus}`);
@@ -162,7 +162,7 @@ export default function DetailRevenue(props) {
                 }
                 
                 console.log('Updating order with payload:', updatePayload);
-                const response = await axios.put(`http://localhost:5000/api/orders/${props.order._id}`, updatePayload);
+                const response = await axios.put(`${API_BASE_URL}/api/orders/${props.order._id}`, updatePayload);
                 console.log('Order update response:', response.data);
             }
             

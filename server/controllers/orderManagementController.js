@@ -4,8 +4,8 @@ let Order = require('../model/Order')
 let Product = require('../model/Product')
 let Type = require('../model/TypeProduct')
 
-class revenueController {
-    // GET /renenue/order
+class orderManagementController {
+    // GET /ordermanagement/order
     showOrder(req, res) {
         Order.find(function(err, orders){
             if(err){
@@ -19,7 +19,7 @@ class revenueController {
             }
         });
     }
-    // POST /revenue/confirm
+    // POST /ordermanagement/confirm
     confirmOrder(req, res) {
         Order.findOneAndUpdate({_id: req.body.idd}, {"isPaid": true}, function(err, result) {
             
@@ -31,7 +31,7 @@ class revenueController {
             }
         })
     }
-    // GET /renenue/food
+    // GET /ordermanagement/food
     showFood(req, res) {
         Product.find(function(err, foods){
             if(err){
@@ -45,7 +45,7 @@ class revenueController {
             }
         });
     }
-    // GET /renenue/type
+    // GET /ordermanagement/type
     showType(req, res) {
         Type.find(function(err, types){
             if(err){
@@ -61,4 +61,4 @@ class revenueController {
     }
 }
 
-module.exports = new revenueController();
+module.exports = new orderManagementController();

@@ -10,7 +10,7 @@ import { useState } from 'react'
 // import ShowInforLine from './components/ShowInforLine'
 import Payment from './components/Payment/Payment'
 import Admin from './Admin'
-import Revenue from './Admin/Revenue/Revenue'
+import OrderManagement from './Admin/OrderManagement/OrderManagement'
 import KingOfFilter from './components/Header/KingOfFilter'
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
           </Route>
           <Route path='/payment' component={Payment} />
           <Route path='/admin' component={Admin} />
-          <Route path='/revenue' component={Revenue} />
+          <Route path='/ordermanagement' component={OrderManagement} />
         </Switch>
       </Router>
     </>

@@ -1,6 +1,7 @@
 import { createContext, useReducer } from "react";
 import reducer from "./reducer";
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 import {
   PRODUCT_LOAD_SUCCESS,
   SET_TYPE_PRODUCT,
@@ -20,7 +21,7 @@ const AdminProvider = ({ children }) => {
   const { products, typeProducts, isLoading } = stateAdmin;
   const getProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/product");
+      const response = await axios.get(`${API_BASE_URL}/api/product`);
 
       if (response.data.success) {
         const products = response.data.products;
@@ -41,7 +42,7 @@ const AdminProvider = ({ children }) => {
     try {
       // console.log(newProduct);
       const res = await axios.post(
-        "http://localhost:5000/api/product",
+        `${API_BASE_URL}/api/product`,
         newProduct
       );
       if (res.data.success) {
@@ -58,7 +59,7 @@ const AdminProvider = ({ children }) => {
   };
   const getTypeProducts = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/typeproduct`);
+      const res = await axios.get(`${API_BASE_URL}/api/typeproduct`);
       console.log(res.data);
       if (res.data.success) {
         dispatch({
@@ -79,7 +80,7 @@ const AdminProvider = ({ children }) => {
   const getTypeProduct = async (product) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/typeproduct/${product.catelory}`
+        `${API_BASE_URL}/api/typeproduct/${product.catelory}`
       );
       console.log(res.data);
       if (res.data.success) {
@@ -99,7 +100,7 @@ const AdminProvider = ({ children }) => {
   };
   const removeProduct = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/product/${id}`);
+      const res = await axios.delete(`${API_BASE_URL}/api/product/${id}`);
       if (res.data.success) {
         console.log(res.data.product);
         getProducts();
@@ -111,7 +112,7 @@ const AdminProvider = ({ children }) => {
   const removeTypeProduct = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/typeproduct/${id}`
+        `${API_BASE_URL}/api/typeproduct/${id}`
       );
       if (res.data.success) {
         console.log(res.data.product);
@@ -130,7 +131,7 @@ const AdminProvider = ({ children }) => {
   const updateProduct = async (id, dataForm) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/product/${id}`,
+        `${API_BASE_URL}/api/product/${id}`,
         dataForm
       );
       if (res.data.success) {
@@ -150,7 +151,7 @@ const AdminProvider = ({ children }) => {
   const addTypeProduct = async (dataForm) => {
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/typeproduct`,
+        `${API_BASE_URL}/api/typeproduct`,
         dataForm
       );
       if (res.data.success) {

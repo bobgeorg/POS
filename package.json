@@ -4,10 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "cd server && node server",
-    "server": "cd server && nodemon server",
+    "update-ip": "node update-ip.js",
+    "build-client": "cd client && npm install && set NODE_OPTIONS=--openssl-legacy-provider && npm run build",
+    "start": "npm run update-ip && npm run build-client && cd server && node server",
+    "server": "npm run update-ip && cd server && nodemon server",
     "client": "cd client && npm run start",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "npm run update-ip && concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "cd client && npm install && CI=false npm run build"
   },
   "author": "",

@@ -4,6 +4,7 @@ import MethodModal from "./Modal/Modal";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import Cartreview from "./CartReview/Cartreview";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import "./index.css";
 
 const Payment = () => {
@@ -117,7 +118,7 @@ const Payment = () => {
     console.log("Submitting order:", orderData);
     try {
       await axios
-        .post(`http://localhost:5000/api/orders/`, orderData)
+        .post(`${API_BASE_URL}/api/orders/`, orderData)
         .then((res) => {
           alert(`Order submitted successfully! Order ID: ${res.data._id}\nStatus: Pending - Your order has been sent to the kitchen/bar.`);
           history.push("/");

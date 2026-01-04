@@ -5,11 +5,12 @@ import { Container, Row, Col } from 'react-grid-system';
 
 import DetailRevenue from "./DetailRevenue";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import { FaSearch } from "react-icons/fa";
 import { BiRestaurant } from "react-icons/bi";
 import useMountTransition from "./useMountTransition";
 
-export default function Revenue() {
+export default function OrderManagement() {
     // const [Staffs, setStaff] = React.useState(null);
     const renderSwitch = (search, current) => {
         switch(search) {
@@ -49,7 +50,7 @@ export default function Revenue() {
     const [checked, setChecked] = React.useState(-1);
     const hasTransitionedIn = useMountTransition(show, 1000);
     React.useEffect(() => {
-        axios.get("http://localhost:5000/revenue/order").then((response) => {
+        axios.get(`${API_BASE_URL}/ordermanagement/order`).then((response) => {
             setOrder(response.data);
             // console.log(response.data);
         });
