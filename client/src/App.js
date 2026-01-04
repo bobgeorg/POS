@@ -12,6 +12,7 @@ import Payment from './components/Payment/Payment'
 import Admin from './Admin'
 import OrderManagement from './Admin/OrderManagement/OrderManagement'
 import KingOfFilter from './components/Header/KingOfFilter'
+import Navigation from './components/Navigation/Navigation'
 
 function App() {
   const [idType, setIdType] = useState(-1)
@@ -21,17 +22,18 @@ function App() {
   return (
     <>
       <Router>
-        <Switch>
-          <Route exact path='/'>
-            <GlobalState>
-              <ShowCart />
+        <GlobalState>
+          <Navigation />
+          <ShowCart />
+          <Switch>
+            <Route exact path='/'>
               <KingOfFilter x={ChangeForIdType} typeId={idType}/>
-            </GlobalState>
-          </Route>
-          <Route path='/payment' component={Payment} />
-          <Route path='/admin' component={Admin} />
-          <Route path='/ordermanagement' component={OrderManagement} />
-        </Switch>
+            </Route>
+            <Route path='/payment' component={Payment} />
+            <Route path='/admin' component={Admin} />
+            <Route path='/ordermanagement' component={OrderManagement} />
+          </Switch>
+        </GlobalState>
       </Router>
     </>
   )

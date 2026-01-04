@@ -64,49 +64,45 @@ const Filter = ({ x, Foods, Typess }) => {
   // console.log("asdfgh", Typess)
   return (
     <>
-      <div className="backtohome">
-        <i className="sourmena-pos-icon"></i>
-        <h3 className="backtohome-title">Sourmena POS</h3>
-      </div>
+      <div className="filter-container">
+        <div className="button-filter button-back">
+          <div onClick={previous} className="arrow-left-food arrow-food"></div>
+        </div>
 
-      {/* <div className="filter-food"> */}
-      <div className="button-filter button-back">
-        <div onClick={previous} className="arrow-left-food arrow-food"></div>
-      </div>
+        {/* <ul className="filter-list"> */}
+        <Slider ref={ref} {...settings}>
+          {/* <FoodFilter
+            handleOneSelected={handleOneSelected}
+            selected={selected}
+            key={0}
+            name="Tất cả món"
+            id={0}
+            x_value={x}
+          /> */}
+          {Typess.map((typeFood, index) => {
+            return (
+              <FoodFilter
+                handleOneSelected={handleOneSelected}
+                selected={selected}
+                // className={}
+                key={typeFood._id}
+                name={typeFood.name}
+                id={index}
+                x_value={x}
+                Typesss={Typess}
+                _id={typeFood._id}
+                // key={typeFood.typeId}
+                // name={typeFood.typeName}
+                // id={typeFood.typeId}
+                // x_value={x}
+              />
+            );
+          })}
+        </Slider>
 
-      {/* <ul className="filter-list"> */}
-      <Slider ref={ref} {...settings}>
-        {/* <FoodFilter
-          handleOneSelected={handleOneSelected}
-          selected={selected}
-          key={0}
-          name="Tất cả món"
-          id={0}
-          x_value={x}
-        /> */}
-        {Typess.map((typeFood, index) => {
-          return (
-            <FoodFilter
-              handleOneSelected={handleOneSelected}
-              selected={selected}
-              // className={}
-              key={typeFood._id}
-              name={typeFood.name}
-              id={index}
-              x_value={x}
-              Typesss={Typess}
-              _id={typeFood._id}
-              // key={typeFood.typeId}
-              // name={typeFood.typeName}
-              // id={typeFood.typeId}
-              // x_value={x}
-            />
-          );
-        })}
-      </Slider>
-
-      <div className="button-filter button-next">
-        <div onClick={next} className="arrow-right-food arrow-food"></div>
+        <div className="button-filter button-next">
+          <div onClick={next} className="arrow-right-food arrow-food"></div>
+        </div>
       </div>
     </>
   );
