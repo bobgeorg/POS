@@ -6,42 +6,70 @@ import { BsCart2 } from 'react-icons/bs';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { AiOutlineMinus } from 'react-icons/ai';
 import Popup from "reactjs-popup";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function ButtonIncrement(props) {
-
   return (
-    <button style={{ marginLeft: '1rem', borderRadius: '10px', cursor: 'pointer' }} onClick={props.onClickFunc}>
-      <AiOutlinePlus className="iconPop" />
+    <button 
+      className="quantity-btn quantity-btn-plus"
+      onClick={props.onClickFunc}
+      aria-label="Increase quantity"
+    >
+      <AiOutlinePlus />
     </button>
   )
 }
+
 function ButtonDecrement(props) {
-
   return (
-    <button style={{ marginLeft: '1rem', borderRadius: '10px', cursor: 'pointer' }} onClick={props.onClickFunc}>
-      <AiOutlineMinus className="iconPop" />
+    <button 
+      className="quantity-btn quantity-btn-minus"
+      onClick={props.onClickFunc}
+      aria-label="Decrease quantity"
+    >
+      <AiOutlineMinus />
     </button>
   )
 }
+
 function Display(props) {
   return (
-    <label style={{ marginLeft: '1rem' }} >{props.message}</label>
+    <span className="quantity-display">{props.message}</span>
   )
 }
 
 const contentStyle = {
-  height: "60%",
-  width: "60%",
+  maxHeight: "90vh",
+  width: "90%",
+  maxWidth: "600px",
+  borderRadius: "12px",
+  padding: "0",
+  overflow: "auto",
 };
 
 export default function ShowCard(props) {
   const [counter, setCounter] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const incrementCounter = () => setCounter(counter + 1);
   let decrementCounter = () => setCounter(counter - 1);
   if (counter <= 1) {
     decrementCounter = () => setCounter(1);
   }
+
+  const resetCounter = () => setCounter(1);
+
   return (
     <Popup
       trigger={
@@ -60,52 +88,57 @@ export default function ShowCard(props) {
       }
       modal
       contentStyle={contentStyle}
+      onClose={resetCounter}
+      closeOnDocumentClick
     >
       {close => (
 
         <div className="modal">
-          <div className="header">ADD TO CART</div>
-          <a className="close" onClick={close} href>&times;</a>
+          <div className="header">
+            <span>ADD TO CART</span>
+            <a className="close" onClick={close} aria-label="Close">&times;</a>
+          </div>
           <div className="content">
-            {' '}
             <Container>
               <Row>
-                <Col lg={4}>
-                  <img className="image_Pop" src={props.image} alt="food_image" width="190" height="170"></img>
+                <Col xs={12} lg={4}>
+                  <div className="modal-image-container">
+                    <img 
+                      className="image_Pop" 
+                      src={props.image} 
+                      alt={props.name}
+                    />
+                  </div>
                 </Col>
-                <Col lg={8}>
+                <Col xs={12} lg={8}>
                   <div className="contentPopup">
-                    <Row className="textBig" >
-                      <Col md={3}>SKU</Col>
-                      <Col md={6}>Name</Col>
-                      <Col className="textright" md={3}>Price</Col>
-                    </Row>
-                    <Row>
-                      <Col md={3}>{props.SKU}</Col>
-                      <Col md={6}>{props.name}</Col>
-                      <Col className="textright" md={3}>€{props.price.toFixed(2)}</Col>
-                    </Row>
-                    <div>{props.description}</div>
-                    <div className="textBig" >
-                      <Row>
-                        <Col md={6}>Quantity :</Col>
-                        <Col className="textright" md={6}>
-                          <ButtonDecrement className="iconPop" onClickFunc={decrementCounter} />
-                          <Display message={counter} />
-                          <ButtonIncrement onClickFunc={incrementCounter} />
-                        </Col>
-                      </Row>
-                      <div onClick={close}>
-                        <div
-                          className="totalPrice"
-                          // onClick={props.context.addProductToCart.bind(this, props.food)}
-                          onClick={props.context.addProductToCart.bind(this, { ...props.food, want: counter })}
-                        >
-                          <label style={{ textAlign: 'center', cursor: 'pointer' }}>
-                            <BsCart2 className="iconTotalPrice" />€{(counter * props.price).toFixed(2)}
-                          </label>
-                        </div>
+                    <div className="modal-product-info">
+                      <h3 className="modal-product-name">{props.name}</h3>
+                      <p className="modal-product-sku">SKU: {props.SKU}</p>
+                      <p className="modal-product-description">{props.description}</p>
+                      <div className="modal-product-price">
+                        <span className="modal-price-label">Price:</span>
+                        <span className="modal-price-value">€{props.price.toFixed(2)}</span>
                       </div>
+                    </div>
+
+                    <div className="modal-quantity-section">
+                      <span className="modal-quantity-label">Quantity:</span>
+                      <div className="modal-quantity-controls">
+                        <ButtonDecrement onClickFunc={decrementCounter} />
+                        <Display message={counter} />
+                        <ButtonIncrement onClickFunc={incrementCounter} />
+                      </div>
+                    </div>
+
+                    <div onClick={close}>
+                      <button
+                        className="totalPrice modal-add-to-cart-btn"
+                        onClick={props.context.addProductToCart.bind(this, { ...props.food, want: counter })}
+                      >
+                        <BsCart2 className="iconTotalPrice" />
+                        <span>Add to Cart - €{(counter * props.price).toFixed(2)}</span>
+                      </button>
                     </div>
                   </div>
                 </Col>
