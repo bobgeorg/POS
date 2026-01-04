@@ -1,0 +1,413 @@
+/* Mobile Responsive Styles for POS System */
+
+/* Mobile scroll container with CSS scroll-snap */
+.mobile-filter-scroll {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: 10px;
+  padding: 10px 5px;
+  width: 100%;
+  
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.mobile-filter-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.mobile-filter-scroll .filter-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 140px;
+  height: 120px;
+  margin: 0;
+}
+
+/* ===== TABLETS AND MEDIUM PHONES (768px and below) ===== */
+@media (max-width: 768px) {
+  /* Filter container - ensure proper layout */
+  .filter-container {
+    max-width: 100% !important;
+    padding: 15px 5px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .filter-container .slick-slider {
+    flex: 1 !important;
+    margin: 0 5px !important;
+  }
+
+  /* Ensure React Slick displays properly on mobile */
+  .slick-slider {
+    display: block !important;
+  }
+
+  .slick-list {
+    display: block !important;
+    overflow: hidden !important;
+  }
+
+  .slick-track {
+    display: flex !important;
+  }
+
+  .slick-slide {
+    display: inline-block !important;
+  }
+
+  .slick-slide > div {
+    display: inline-block !important;
+  }
+
+  /* Category filter items - force visibility */
+  .filter-item {
+    width: 140px !important;
+    height: 120px !important;
+    margin: 8px 5px !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .filter-item-img {
+    width: 50px !important;
+    height: 50px !important;
+    margin: 12px auto 0 !important;
+  }
+
+  .filter-item-title {
+    font-size: 13px !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Arrow buttons - make them smaller but clearly visible */
+  .button-filter {
+    width: 30px !important;
+    min-width: 30px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .arrow-food {
+    border-top: 15px solid transparent !important;
+    border-bottom: 15px solid transparent !important;
+  }
+
+  .arrow-left-food {
+    border-right: 12px solid #e33539 !important;
+    border-left: 0 !important;
+  }
+
+  .arrow-right-food {
+    border-left: 12px solid #e33539 !important;
+    border-right: 0 !important;
+  }
+
+  /* Food cards - responsive grid */
+  .cardfood {
+    width: calc(50% - 20px) !important;
+    margin: 10px !important;
+    display: inline-block !important;
+    vertical-align: top !important;
+  }
+
+  .imagefood {
+    height: 6rem !important;
+  }
+
+  .card-title {
+    font-size: 14px !important;
+  }
+
+  .price {
+    font-size: 14px !important;
+  }
+
+  /* Modal/Popup adjustments */
+  .modal {
+    width: 95% !important;
+    margin: 0 auto !important;
+  }
+
+  .image_Pop {
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 10px !important;
+  }
+
+  /* Cart on mobile - full width overlay */
+  .cart {
+    width: 100% !important;
+    right: 0 !important;
+    top: 60px !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    border-radius: 12px 12px 0 0 !important;
+    max-height: calc(100vh - 60px) !important;
+  }
+
+  /* Navigation mobile adjustments */
+  .nav-container {
+    padding: 0 0.5rem !important;
+  }
+
+  .nav-brand {
+    gap: 0.5rem !important;
+  }
+
+  .nav-brand h2 {
+    font-size: 1.1rem !important;
+  }
+
+  .nav-logo {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .nav-links {
+    gap: 0.5rem !important;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.8rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .nav-link span {
+    display: none !important;
+  }
+
+  .nav-icon {
+    font-size: 1.2rem !important;
+  }
+
+  .nav-cart-button {
+    padding: 0.5rem 0.8rem !important;
+  }
+
+  .nav-cart-badge {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 0.7rem !important;
+    top: -8px !important;
+    right: -8px !important;
+  }
+
+  /* Background image */
+  .background {
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: scroll !important;
+  }
+
+  /* HR text divider */
+  .hr-text {
+    font-size: 18px !important;
+    padding: 0 10px !important;
+  }
+
+  /* Menu container */
+  .background3 {
+    padding: 10px !important;
+  }
+}
+
+/* ===== EXTRA SMALL PHONES (480px and below) ===== */
+@media (max-width: 480px) {
+  /* Mobile scroll - smaller items */
+  .mobile-filter-scroll .filter-item {
+    width: 120px;
+    height: 100px;
+  }
+
+  /* Navigation - ultra compact */
+  .nav-brand h2 {
+    font-size: 0.9rem !important;
+  }
+
+  .nav-logo {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .nav-link {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .nav-icon {
+    font-size: 1rem !important;
+  }
+
+  /* Filter container - ensure it stays visible */
+  .filter-container {
+    padding: 10px 2px !important;
+  }
+
+  /* Filter items - smaller but still visible */
+  .filter-item {
+    width: 110px !important;
+    height: 95px !important;
+    margin: 5px 3px !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .filter-item-img {
+    width: 40px !important;
+    height: 40px !important;
+    margin: 10px auto 0 !important;
+  }
+
+  .filter-item-title {
+    font-size: 11px !important;
+    margin-bottom: 8px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Arrow buttons - very small but usable */
+  .button-filter {
+    width: 20px !important;
+    min-width: 20px !important;
+  }
+
+  .arrow-food {
+    border-top: 12px solid transparent !important;
+    border-bottom: 12px solid transparent !important;
+  }
+
+  .arrow-left-food {
+    border-right: 10px solid #e33539 !important;
+    border-left: 0 !important;
+  }
+
+  .arrow-right-food {
+    border-left: 10px solid #e33539 !important;
+    border-right: 0 !important;
+  }
+
+  /* Food cards - full width on tiny screens */
+  .cardfood {
+    width: calc(100% - 20px) !important;
+    margin: 10px auto !important;
+  }
+
+  /* Cart adjustments for small screens */
+  .cart-header {
+    font-size: 16px !important;
+    padding: 10px !important;
+  }
+
+  .cart-items {
+    padding: 10px !important;
+  }
+
+  /* Modal for small screens */
+  .modal {
+    width: 98% !important;
+  }
+
+  .modal > .header {
+    font-size: 16px !important;
+    padding: 8px !important;
+  }
+
+  .image_Pop {
+    width: 100% !important;
+    margin: 10px 0 !important;
+  }
+}
+
+/* ===== TABLET LANDSCAPE (769px to 1024px) ===== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .filter-container {
+    padding: 20px 30px !important;
+  }
+
+  .filter-item {
+    width: 160px !important;
+    height: 130px !important;
+  }
+
+  .cardfood {
+    width: calc(33.333% - 30px) !important;
+  }
+
+  .nav-container {
+    max-width: 100% !important;
+    padding: 0 1.5rem !important;
+  }
+}
+
+/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch target sizes - minimum 44x44px for accessibility */
+  .cardfood {
+    min-height: 44px !important;
+  }
+
+  .nav-link,
+  .nav-cart-button {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+
+  .filter-item {
+    min-height: 44px !important;
+  }
+
+  .button-filter {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Remove hover effects on touch devices */
+  .cardfood:hover {
+    transform: none !important;
+  }
+
+  .filter-item:hover {
+    background-color: inherit !important;
+  }
+
+  .totalPrice:hover {
+    transform: none !important;
+  }
+
+  /* Disable scroll on background for touch */
+  .background {
+    background-attachment: scroll !important;
+  }
+}
+
+/* ===== LANDSCAPE ORIENTATION FIXES ===== */
+@media (max-height: 600px) and (orientation: landscape) {
+  .cart {
+    top: 50px !important;
+    max-height: calc(100vh - 50px) !important;
+  }
+
+  .filter-container {
+    padding: 10px 20px !important;
+  }
+
+  .filter-item {
+    height: 100px !important;
+  }
+
+  .nav-container {
+    padding: 0.5rem 1rem !important;
+  }
+}

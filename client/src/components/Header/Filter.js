@@ -11,14 +11,35 @@ const Filter = ({ x, Foods, Typess }) => {
   // Typess.push({image:"/image/FoodsType/ALL.jpg", name:"Tất cả món"})
   console.log("x........Typess", Typess);
   const [selected, setSelected] = useState(-1);
+  const [isMobile, setIsMobile] = useState(false);
   const ref = useRef({});
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const next = () => {
-    ref.current.slickNext();
+    if (isMobile && scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    } else if (ref.current.slickNext) {
+      ref.current.slickNext();
+    }
   };
 
   const previous = () => {
-    ref.current.slickPrev();
+    if (isMobile && scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    } else if (ref.current.slickPrev) {
+      ref.current.slickPrev();
+    }
   };
 
   const settings = {
@@ -35,13 +56,29 @@ const Filter = ({ x, Foods, Typess }) => {
         breakpoint: 1198,
         settings: {
           className: "stick-list-cc",
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          rows: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
-          rows: 2,
+          slidesToScroll: 1,
+          rows: 1,
         },
       },
       {
         breakpoint: 576,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          rows: 1,
+        },
+      },
+      {
+        breakpoint: 480,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -69,36 +106,43 @@ const Filter = ({ x, Foods, Typess }) => {
           <div onClick={previous} className="arrow-left-food arrow-food"></div>
         </div>
 
-        {/* <ul className="filter-list"> */}
-        <Slider ref={ref} {...settings}>
-          {/* <FoodFilter
-            handleOneSelected={handleOneSelected}
-            selected={selected}
-            key={0}
-            name="Tất cả món"
-            id={0}
-            x_value={x}
-          /> */}
-          {Typess.map((typeFood, index) => {
-            return (
-              <FoodFilter
-                handleOneSelected={handleOneSelected}
-                selected={selected}
-                // className={}
-                key={typeFood._id}
-                name={typeFood.name}
-                id={index}
-                x_value={x}
-                Typesss={Typess}
-                _id={typeFood._id}
-                // key={typeFood.typeId}
-                // name={typeFood.typeName}
-                // id={typeFood.typeId}
-                // x_value={x}
-              />
-            );
-          })}
-        </Slider>
+        {isMobile ? (
+          // Mobile: Use native scroll with scroll-snap
+          <div className="mobile-filter-scroll" ref={scrollRef}>
+            {Typess.map((typeFood, index) => {
+              return (
+                <FoodFilter
+                  handleOneSelected={handleOneSelected}
+                  selected={selected}
+                  key={typeFood._id}
+                  name={typeFood.name}
+                  id={index}
+                  x_value={x}
+                  Typesss={Typess}
+                  _id={typeFood._id}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          // Desktop: Use react-slick
+          <Slider ref={ref} {...settings}>
+            {Typess.map((typeFood, index) => {
+              return (
+                <FoodFilter
+                  handleOneSelected={handleOneSelected}
+                  selected={selected}
+                  key={typeFood._id}
+                  name={typeFood.name}
+                  id={index}
+                  x_value={x}
+                  Typesss={Typess}
+                  _id={typeFood._id}
+                />
+              );
+            })}
+          </Slider>
+        )}
 
         <div className="button-filter button-next">
           <div onClick={next} className="arrow-right-food arrow-food"></div>
