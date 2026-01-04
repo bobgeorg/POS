@@ -1,47 +1,66 @@
-.method:hover {
-  background-color: #c0c0c0;
-  cursor: pointer;
+/* Method Modal Styles */
+.method-modal .modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
-.modal-dialog {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
+
+.method-modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px 16px 0 0 !important;
+  padding: 24px;
+  border: none !important;
 }
-.modal-title {
-  font-size: 30px;
-}
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-.modal-body {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: center;
-}
-.method {
-  width: 100%;
-  height: 100%;
-  margin-top: 25px;
-}
-.modal-card-title {
+
+.method-modal-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 auto;
   text-align: center;
-  vertical-align: middle;
-  line-height: 180px;
-  height: 100%;
-  color: black;
-  font-size: 30px;
+}
+
+.method-modal-body {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.method-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 32px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  text-align: center;
+}
+
+.method-card:hover {
+  transform: translateY(-4px);
+  border-color: #667eea;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.method-card-icon {
+  font-size: 48px;
+  color: #667eea;
+  margin-bottom: 16px;
+}
+
+.method-card-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.method-card-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
 }
 
 .form-holder {
@@ -51,43 +70,42 @@
   align-items: center;
   text-align: center;
   min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
 }
 
 .form-holder .form-content {
   position: relative;
   text-align: center;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
-  -webkit-justify-content: center;
   justify-content: center;
-  -webkit-align-items: center;
   align-items: center;
-  padding: 60px;
+  width: 100%;
+  max-width: 800px;
 }
 
 .form-content .form-items {
-  border: 3px solid #000;
-  padding: 40px;
+  background: white;
+  border: none;
+  padding: 48px;
   display: inline-block;
   width: 100%;
-  min-width: 540px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+  border-radius: 16px;
   text-align: left;
-  -webkit-transition: all 0.4s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   transition: all 0.4s ease;
 }
 
 .form-content h3 {
-  color: #000;
+  color: #333;
   text-align: left;
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 5px;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .form-content h3.form-title {
@@ -95,18 +113,22 @@
 }
 
 .form-content p {
-  color: #000;
+  color: #666;
   text-align: left;
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 20px;
-  margin-bottom: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 32px;
 }
 
 .form-content label,
 .was-validated .form-check-input:invalid ~ .form-check-label,
 .was-validated .form-check-input:valid ~ .form-check-label {
-  color: #000;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: block;
 }
 
 .form-content input[type='text'],
@@ -114,56 +136,81 @@
 .form-content input[type='email'],
 .form-content select {
   width: 100%;
-  padding: 9px 20px;
+  padding: 14px 18px;
   text-align: left;
-  border: 0;
+  border: 2px solid #e0e0e0;
   outline: 0;
-  border-radius: 6px;
-  background-color: #f0e9e9;
-  font-size: 15px;
-  font-weight: 300;
-  color: #000;
-  -webkit-transition: all 0.3s ease;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  font-size: 16px;
+  font-weight: 400;
+  color: #333;
   transition: all 0.3s ease;
-  margin-top: 16px;
-  margin-bottom: 30px;
+  margin-top: 8px;
+  margin-bottom: 24px;
 }
+
+.form-content input[type='text']:focus,
+.form-content input[type='password']:focus,
+.form-content input[type='email']:focus,
+.form-content select:focus {
+  border-color: #667eea;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 .form-content input[type='text']::placeholder,
 .form-content input[type='password']::placeholder,
 .form-content input[type='email']::placeholder,
 .form-content select::placeholder {
-  color: #a09c9c;
+  color: #999;
 }
 .primary {
-  background-color: #0288fd;
-  border-radius: 20px;
-  width: 150px;
-  height: 40px;
-  border: 0px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  padding: 14px 32px;
+  width: auto;
+  min-width: 150px;
+  height: auto;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .primary:hover,
 .primary:focus,
 .primary:active {
-  background-color: #186eb9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
   outline: none !important;
   border: none !important;
-  box-shadow: none;
 }
+
 .secondary {
-  background-color: #a9b5c0;
+  background-color: #f0f0f0;
   outline: none;
-  border: 0px;
+  border: none;
   box-shadow: none;
-  border-radius: 20px;
-  width: 150px;
-  height: 40px;
+  border-radius: 10px;
+  padding: 14px 32px;
+  width: auto;
+  min-width: 150px;
+  height: auto;
+  color: #666;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .secondary:hover,
 .secondary:focus,
 .secondary:active {
-  background-color: #707a83;
+  background-color: #e0e0e0;
+  color: #333;
   outline: none !important;
   border: none !important;
   box-shadow: none;
@@ -212,44 +259,212 @@
 .buttons-list {
   display: flex;
   justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+  flex-wrap: wrap;
 }
 
 .payment-cart-list {
   margin: 0;
   padding: 0;
+  list-style: none;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+  background: #f8f9fa;
+}
+
+.payment-cart-list li {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.payment-cart-list li:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .payment-cart-list li div p {
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
 }
+
 .payment-cart-list li div div div p {
-  color: #000;
+  color: #666;
   text-align: left;
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 20px;
-  margin-bottom: 15px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 22px;
+  margin-bottom: 12px;
 }
 
 .payment-total-price {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   flex-direction: column;
-  margin: 20px 5px 20px 0px;
-  font-size: large;
-  font-weight: bold;
-  color: black;
+  margin: 24px 0;
+  padding: 16px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 10px;
 }
 
 .payment-review {
-  color: #000;
+  color: #333;
   text-align: left;
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 20px;
-  margin-bottom: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
 }
+
+.payment-review strong {
+  color: #667eea;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 150px;
+}
+
 .payment-review span {
-  margin-left: 20px;
+  margin-left: 16px;
+  color: #333;
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .method-modal-body {
+    padding: 20px;
+  }
+
+  .method-card {
+    padding: 24px;
+  }
+
+  .method-card-icon {
+    font-size: 36px;
+  }
+
+  .method-card-title {
+    font-size: 20px;
+  }
+
+  .method-modal-title {
+    font-size: 24px;
+  }
+
+  .form-holder {
+    padding: 16px;
+  }
+
+  .form-content .form-items {
+    padding: 32px 24px;
+    min-width: auto;
+  }
+
+  .form-content h3 {
+    font-size: 26px;
+  }
+
+  .form-content p {
+    font-size: 15px;
+  }
+
+  .buttons-list {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .payment-cart-list {
+    max-height: 300px;
+  }
+
+  .payment-total-price {
+    font-size: 20px;
+  }
+
+  .payment-review strong {
+    display: block;
+    margin-bottom: 4px;
+    min-width: auto;
+  }
+
+  .payment-review span {
+    margin-left: 0;
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .method-modal-header {
+    padding: 20px;
+  }
+
+  .method-modal-title {
+    font-size: 20px;
+  }
+
+  .method-card {
+    padding: 20px;
+  }
+
+  .method-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .method-card-title {
+    font-size: 18px;
+  }
+
+  .method-card-subtitle {
+    font-size: 13px;
+  }
+
+  .form-content .form-items {
+    padding: 24px 16px;
+  }
+
+  .form-content h3 {
+    font-size: 22px;
+  }
+
+  .form-content p {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .form-content input[type='text'],
+  .form-content input[type='password'],
+  .form-content input[type='email'],
+  .form-content select {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  .primary,
+  .secondary {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+
+  .payment-total-price {
+    font-size: 18px;
+  }
 }

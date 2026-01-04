@@ -1,15 +1,19 @@
-import { React, useState } from "react";
+import { React, useState, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
 import MethodModal from "./Modal/Modal";
+import SuccessModal from "./SuccessModal/SuccessModal";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import Cartreview from "./CartReview/Cartreview";
 import axios from "axios";
 import API_BASE_URL from "../../config/api";
+import ShopContext from "../ShopContext";
 import "./index.css";
 
 const Payment = () => {
   const [ModalOpened, setModalOpened] = useState(true);
   const [usingMethod, setusingMethod] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [submittedOrderId, setSubmittedOrderId] = useState("");
 
   const [state, setState] = useState(1);
   const [name, setName] = useState("");
@@ -25,6 +29,7 @@ const Payment = () => {
   const history = useHistory();
   const location = useLocation();
   const { cartcontext } = location.state;
+  const context = useContext(ShopContext);
   let total = 0;
   // eslint-disable-next-line array-callback-return
   cartcontext.map((cartItem, index) => {
@@ -49,36 +54,16 @@ const Payment = () => {
     setModalOpened(false);
   };
   const handlenameChange = (event) => {
-    if (!event.target.value) {
-      setnameerror(true);
-    } else {
-      setnameerror(false);
-      setName(event.target.value);
-    }
+    setName(event.target.value);
   };
   const handletableChange = (event) => {
-    if (!event.target.value) {
-      settableerror(true);
-    } else {
-      settableerror(false);
-      setTable(event.target.value);
-    }
+    setTable(event.target.value);
   };
   const handleaddressChange = (event) => {
-    if (!event.target.value) {
-      setaddresserror(true);
-    } else {
-      setaddresserror(false);
-      setAddress(event.target.value);
-    }
+    setAddress(event.target.value);
   };
   const handlenumberChange = (event) => {
-    if (!event.target.value) {
-      setnumbererror(true);
-    } else {
-      setnumbererror(false);
-      setNumber(event.target.value);
-    }
+    setNumber(event.target.value);
   };
 
   const updateState = () => {
@@ -120,8 +105,9 @@ const Payment = () => {
       await axios
         .post(`${API_BASE_URL}/api/orders/`, orderData)
         .then((res) => {
-          alert(`Order submitted successfully! Order ID: ${res.data._id}\nStatus: Pending - Your order has been sent to the kitchen/bar.`);
-          history.push("/");
+          setSubmittedOrderId(res.data._id);
+          setShowSuccessModal(true);
+          context.clearCart();
           console.log(res.data);
         })
         .catch((error) => console.log(error));
@@ -130,11 +116,23 @@ const Payment = () => {
     }
   };
 
+  const handleSuccessClose = () => {
+    setShowSuccessModal(false);
+    history.push("/");
+  };
+
   return (
     <div>
-      {ModalOpened ? (
-        <MethodModal isOpened={ModalOpened} onChooseMethod={setMethod} />
-      ) : usingMethod === "Directly" && state === 1 ? (
+      <SuccessModal 
+        show={showSuccessModal} 
+        orderId={submittedOrderId} 
+        onClose={handleSuccessClose}
+      />
+      {!showSuccessModal && (
+        <>
+          {ModalOpened ? (
+            <MethodModal isOpened={ModalOpened} onChooseMethod={setMethod} />
+          ) : usingMethod === "Directly" && state === 1 ? (
         <Form className="form-holder">
           <div className="form-content">
             <div className="form-items">
@@ -358,6 +356,8 @@ const Payment = () => {
           </div>
         </Form>
       ) : null}
+        </>
+      )}
     </div>
   );
 };

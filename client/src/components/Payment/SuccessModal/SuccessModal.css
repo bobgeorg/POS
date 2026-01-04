@@ -1,0 +1,203 @@
+.success-modal .modal-content {
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.success-modal-body {
+  padding: 48px 40px;
+  text-align: center;
+  background: white;
+}
+
+.success-icon-container {
+  margin-bottom: 24px;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.success-icon {
+  font-size: 80px;
+  color: #4caf50;
+  filter: drop-shadow(0 4px 12px rgba(76, 175, 80, 0.3));
+}
+
+.success-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.success-message {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 32px;
+  line-height: 24px;
+}
+
+.success-order-info {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.success-order-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.success-order-id {
+  font-size: 18px;
+  font-weight: 700;
+  color: #667eea;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.success-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff3cd;
+  color: #856404;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  border: 2px solid #ffeaa7;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #ffa502;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-text {
+  font-weight: 600;
+}
+
+.success-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 16px 48px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+.success-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.success-button:active {
+  transform: translateY(0);
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .success-modal-body {
+    padding: 40px 32px;
+  }
+
+  .success-icon {
+    font-size: 64px;
+  }
+
+  .success-title {
+    font-size: 28px;
+  }
+
+  .success-message {
+    font-size: 15px;
+  }
+
+  .success-order-id {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .success-modal-body {
+    padding: 32px 24px;
+  }
+
+  .success-icon {
+    font-size: 56px;
+  }
+
+  .success-title {
+    font-size: 24px;
+  }
+
+  .success-message {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .success-order-info {
+    padding: 16px;
+  }
+
+  .success-order-label {
+    font-size: 13px;
+  }
+
+  .success-order-id {
+    font-size: 15px;
+  }
+
+  .success-status-badge {
+    padding: 10px 20px;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  .success-button {
+    padding: 14px 32px;
+    font-size: 15px;
+    max-width: 100%;
+  }
+}

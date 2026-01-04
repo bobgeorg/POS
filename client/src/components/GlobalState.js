@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import ShopContext from "./ShopContext";
-import { shopReducer, ADD_PRODUCT, REMOVE_PRODUCT, REMOVE_ALL } from "./reducers";
+import { shopReducer, ADD_PRODUCT, REMOVE_PRODUCT, REMOVE_ALL, CLEAR_CART } from "./reducers";
 
 function GlobalState(props) {
 
@@ -17,6 +17,10 @@ function GlobalState(props) {
   const removeProductFromCart = productId => {
     dispatch({ type: REMOVE_PRODUCT, productId: productId });
   };
+  
+  const clearCart = () => {
+    dispatch({ type: CLEAR_CART });
+  };
 
   return (
     <ShopContext.Provider
@@ -25,7 +29,8 @@ function GlobalState(props) {
         cart: cartState.cart,
         addProductToCart: addProductToCart,
         removeProductFromCart: removeProductFromCart,
-        removeAll: removeAll
+        removeAll: removeAll,
+        clearCart: clearCart
       }}
     >
       {props.children}

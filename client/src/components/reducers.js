@@ -1,6 +1,7 @@
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const REMOVE_PRODUCT = "REMOVE_PRODUCT";
 export const REMOVE_ALL = "REMOVE_ALL";
+export const CLEAR_CART = "CLEAR_CART";
 
 const addProductToCart = (product, state) => {
   console.log("adding product", product);
@@ -62,6 +63,8 @@ export const shopReducer = (state, action) => {
       return removeProductFromCart(action.productId, state);
     case REMOVE_ALL:
       return removeAll(action.product, state);
+    case CLEAR_CART:
+      return { ...state, cart: [] };
     default:
       return state;
   }

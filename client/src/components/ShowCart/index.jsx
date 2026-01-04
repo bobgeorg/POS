@@ -92,6 +92,7 @@ const ShowCart = () => {
                 <button 
                   className="cart-payment-button" 
                   disabled={isCartEmpty}
+                  onClick={handleClickClose}
                 >
                   PLACE ORDER
                 </button>
