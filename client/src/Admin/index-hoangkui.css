@@ -301,3 +301,536 @@ tr:nth-child(even) {
 .button-filter-food:hover {
   opacity: 0.8;
 }
+
+/* Modern Modal Styles for Admin */
+.modern-modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 18px 20px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modern-modal-title {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modern-modal-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+  line-height: 1;
+}
+
+.modern-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modern-modal-content {
+  padding: 24px;
+}
+
+.modern-form-group {
+  margin-bottom: 20px;
+}
+
+.modern-form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.modern-form-label .required {
+  color: #e74c3c;
+  margin-left: 4px;
+}
+
+.modern-form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.modern-form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.modern-form-input.error {
+  border-color: #e74c3c;
+}
+
+.modern-form-input::placeholder {
+  color: #999;
+}
+
+.modern-image-upload {
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.modern-image-upload:hover {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+.image-upload-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.error-message {
+  display: block;
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.modern-image-upload .button-upload-preview {
+  max-width: 200px;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.modern-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+  justify-content: flex-end;
+}
+
+.modern-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modern-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.modern-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.modern-btn-secondary {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.modern-btn-secondary:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* Responsive styles for admin modals */
+@media (max-width: 768px) {
+  .modern-modal-header {
+    padding: 20px;
+  }
+
+  .modern-modal-title {
+    font-size: 20px;
+  }
+
+  .modern-modal-content {
+    padding: 24px;
+  }
+
+  .modern-modal-actions {
+    flex-direction: column;
+  }
+
+  .modern-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-modal-header {
+    padding: 16px;
+  }
+
+  .modern-modal-title {
+    font-size: 18px;
+  }
+
+  .modern-modal-content {
+    padding: 20px;
+  }
+
+  .modern-form-input {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .modern-image-upload {
+    padding: 16px;
+  }
+}
+
+/* Admin Container and Tabs */
+.admin-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 20px 20px 0;
+  background: #f8f9fa;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.admin-tab {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #666;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-tab i {
+  font-size: 18px;
+}
+
+.admin-tab:hover {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.admin-tab.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+  background: white;
+}
+
+.admin-content {
+  background: white;
+  min-height: calc(100vh - 70px);
+}
+
+/* Product Management Container and Tabs - Nested inside Admin */
+.product-management-container {
+  width: 100%;
+  background: white;
+}
+
+.product-management-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 20px 20px 0;
+  background: #fafbfc;
+  border-bottom: 2px solid #e8eaed;
+}
+
+.product-tab {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #666;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-tab i {
+  font-size: 16px;
+}
+
+.product-tab:hover {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.product-tab.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+  background: white;
+}
+
+.product-management-content {
+  background: white;
+  min-height: calc(100vh - 200px);
+}
+
+/* Manage Categories Styles */
+.manage-categories-container {
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.manage-categories-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.manage-categories-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.no-categories {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.no-categories i {
+  font-size: 64px;
+  margin-bottom: 16px;
+  color: #ddd;
+}
+
+.no-categories p {
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Category Card */
+.category-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+}
+
+.category-card-image-wrapper {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-card-image {
+  transform: scale(1.05);
+}
+
+.category-card-content {
+  padding: 20px;
+  flex: 1;
+}
+
+.category-card-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 12px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-card-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+.category-product-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border-radius: 20px;
+}
+
+.category-product-count i {
+  font-size: 14px;
+  color: #667eea;
+}
+
+/* Category Actions */
+.category-card-actions {
+  display: flex;
+  border-top: 1px solid #f0f0f0;
+}
+
+.category-action-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  background: white;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.category-action-btn i {
+  font-size: 16px;
+}
+
+.category-action-btn:first-child {
+  border-right: 1px solid #f0f0f0;
+}
+
+.category-action-btn.edit-btn:hover {
+  background: #667eea;
+  color: white;
+}
+
+.category-action-btn.delete-btn:hover {
+  background: #dc3545;
+  color: white;
+}
+
+/* Responsive Styles for Category Management */
+@media (max-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .manage-categories-container {
+    padding: 20px;
+  }
+
+  .manage-categories-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .manage-categories-title {
+    font-size: 24px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .category-card-image-wrapper {
+    height: 150px;
+  }
+
+  .admin-tabs {
+    padding: 16px 16px 0;
+  }
+
+  .admin-tab {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .manage-categories-container {
+    padding: 16px;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-card-image-wrapper {
+    height: 200px;
+  }
+
+  .admin-tab span {
+    display: none;
+  }
+
+  .admin-tab {
+    padding: 10px 12px;
+  }
+}

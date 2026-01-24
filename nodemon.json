@@ -1,0 +1,12 @@
+{
+  "watch": ["server"],
+  "ignore": [
+    "server/uploads/**",
+    "uploads/**",
+    "client/**",
+    "*.log",
+    "*.txt"
+  ],
+  "ext": "js,json",
+  "delay": "1000"
+}

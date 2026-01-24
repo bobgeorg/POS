@@ -10,7 +10,7 @@ import { useState } from 'react'
 // import ShowInforLine from './components/ShowInforLine'
 import Payment from './components/Payment/Payment'
 import Admin from './Admin'
-import OrderManagement from './Admin/OrderManagement/OrderManagement'
+import Orders from './components/Orders/Orders'
 import KingOfFilter from './components/Header/KingOfFilter'
 import Navigation from './components/Navigation/Navigation'
 
@@ -30,8 +30,8 @@ function App() {
               <KingOfFilter x={ChangeForIdType} typeId={idType}/>
             </Route>
             <Route path='/payment' component={Payment} />
+            <Route path='/orders' component={Orders} />
             <Route path='/admin' component={Admin} />
-            <Route path='/ordermanagement' component={OrderManagement} />
           </Switch>
         </GlobalState>
       </Router>
