@@ -7,6 +7,7 @@ import Cartreview from "./CartReview/Cartreview";
 import axios from "axios";
 import API_BASE_URL from "../../config/api";
 import ShopContext from "../ShopContext";
+import { useConfig } from "../../hooks/useConfig";
 import "./index.css";
 
 const Payment = () => {
@@ -26,6 +27,7 @@ const Payment = () => {
   const [addresserror, setaddresserror] = useState(false);
   const [numbererror, setnumbererror] = useState(false);
 
+  const { getTableOptions } = useConfig();
   const history = useHistory();
   const location = useLocation();
   const { cartcontext } = location.state;
@@ -161,18 +163,11 @@ const Payment = () => {
                   onChange={handletableChange}
                 >
                   <option>Select the table</option>
-                  <option value="1">01</option>
-                  <option value="2">02</option>
-                  <option value="3">03</option>
-                  <option value="4">04</option>
-                  <option value="5">05</option>
-                  <option value="6">06</option>
-                  <option value="7">07</option>
-                  <option value="8">08</option>
-                  <option value="9">09</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
+                  {getTableOptions().map(tableNum => (
+                    <option key={tableNum} value={tableNum}>
+                      {String(tableNum).padStart(2, '0')}
+                    </option>
+                  ))}
                 </Form.Control>
                 {tableerror ? (
                   <div className="invalid-feedback">

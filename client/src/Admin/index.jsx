@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AdminProvider, { adminContext } from "./AdminContext";
 import ListProduct from "./views/ListProduct";
 import OrderManagement from "./OrderManagement/OrderManagement";
+import Configuration from "./Configuration/Configuration";
 import "./AdminTabs.css";
 
 const Admin = () => {
@@ -33,10 +34,18 @@ const Admin = () => {
             <i className="fas fa-receipt"></i>
             Order Management
           </button>
+          <button
+            className={`admin-tab-button ${activeTab === "config" ? "active" : ""}`}
+            onClick={() => handleTabChange("config")}
+          >
+            <i className="fas fa-cog"></i>
+            Configuration
+          </button>
         </div>
         <div className="admin-tab-content">
           {activeTab === "products" && <ListProduct />}
           {activeTab === "orders" && <OrderManagement />}
+          {activeTab === "config" && <Configuration />}
         </div>
       </div>
     </AdminProvider>

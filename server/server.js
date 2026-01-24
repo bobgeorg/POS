@@ -7,6 +7,7 @@ const productRouter = require('./routers/product');
 const typeProductRouter = require('./routers/typeProduct');
 const orderRoutes = require('./routers/orderRoutes');
 const orderManagementRoutes = require('./routers/orderManagementRouter');
+const configRoutes = require('./routers/configRouter');
 // const fileUpload = require("express-fileupload");
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/product/', productRouter);
 app.use('/api/typeproduct/', typeProductRouter);
 app.use('/api/orders', orderRoutes);
 app.use('/ordermanagement', orderManagementRoutes);
+app.use('/api/config', configRoutes);
 // app.get("/", (req, res) => res.send("Hello all!"));
 
 // Serve React app from build folder

@@ -11,6 +11,7 @@
     "server": "npm run update-ip && cd server && nodemon server",
     "client": "cd client && npm run start",
     "dev": "npm run update-ip && concurrently \"npm run server\" \"npm run client\"",
+    "init-config": "cd server && node init-config.js",
     "heroku-postbuild": "cd client && npm install && CI=false npm run build"
   },
   "author": "",
