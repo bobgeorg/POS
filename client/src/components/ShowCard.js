@@ -50,6 +50,7 @@ const contentStyle = {
 export default function ShowCard(props) {
   const [counter, setCounter] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     const checkMobile = () => {
@@ -68,7 +69,10 @@ export default function ShowCard(props) {
     decrementCounter = () => setCounter(1);
   }
 
-  const resetCounter = () => setCounter(1);
+  const resetCounter = () => {
+    setCounter(1);
+    setComment('');
+  };
 
   return (
     <Popup
@@ -114,8 +118,6 @@ export default function ShowCard(props) {
                   <div className="contentPopup">
                     <div className="modal-product-info">
                       <h3 className="modal-product-name">{props.name}</h3>
-                      <p className="modal-product-sku">SKU: {props.SKU}</p>
-                      <p className="modal-product-description">{props.description}</p>
                       <div className="modal-product-price">
                         <span className="modal-price-label">Price:</span>
                         <span className="modal-price-value">€{props.price.toFixed(2)}</span>
@@ -131,10 +133,21 @@ export default function ShowCard(props) {
                       </div>
                     </div>
 
+                    <div className="modal-comment-section">
+                      <label className="modal-comment-label">Special Instructions (Optional):</label>
+                      <textarea
+                        className="modal-comment-input"
+                        placeholder="Any special requests? e.g., no onions, extra sauce, cook well done, allergies, etc."
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        rows="4"
+                      />
+                    </div>
+
                     <div onClick={close}>
                       <button
                         className="totalPrice modal-add-to-cart-btn"
-                        onClick={props.context.addProductToCart.bind(this, { ...props.food, want: counter })}
+                        onClick={props.context.addProductToCart.bind(this, { ...props.food, want: counter, comment: comment })}
                       >
                         <BsCart2 className="iconTotalPrice" />
                         <span>Add to Cart - €{(counter * props.price).toFixed(2)}</span>

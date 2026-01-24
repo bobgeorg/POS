@@ -6,18 +6,41 @@ let Type = require('../model/TypeProduct')
 
 class orderManagementController {
     // GET /ordermanagement/order
-    showOrder(req, res) {
-        Order.find(function(err, orders){
-            if(err){
-                console.log(err);
+    async showOrder(req, res) {
+        try {
+            const { date } = req.query;
+            let query = {};
+
+            if (date) {
+                // Parse the date and create start/end of day
+                const startDate = new Date(date);
+                startDate.setHours(0, 0, 0, 0);
+                const endDate = new Date(date);
+                endDate.setHours(23, 59, 59, 999);
+
+                query.createdAt = {
+                    $gte: startDate,
+                    $lte: endDate
+                };
+            } else {
+                // Default to today's orders
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const endOfDay = new Date();
+                endOfDay.setHours(23, 59, 59, 999);
+
+                query.createdAt = {
+                    $gte: today,
+                    $lte: endOfDay
+                };
             }
-            else {
-                // orders.map(order => (
-                //     {...order, SPECIAL: 'OK'}
-                // ))
-                res.json(orders)  
-            }
-        });
+
+            const orders = await Order.find(query).sort({ createdAt: -1 });
+            res.json(orders);
+        } catch (err) {
+            console.error('Error fetching orders:', err);
+            res.status(500).json({ message: err.message });
+        }
     }
     // POST /ordermanagement/confirm
     confirmOrder(req, res) {

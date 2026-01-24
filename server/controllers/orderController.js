@@ -4,7 +4,7 @@ const Order = require('../model/Order')
 // @route   POST /api/orders
 // @access  Private
 const addOrderItems = async (req, res) => {
-  const { OrderItems, usingMethod, totalPrice, userName } = req.body
+  const { OrderItems, usingMethod, totalPrice, userName, phone, address, table } = req.body
 
   if (OrderItems && OrderItems.length === 0) {
     res.status(400)
@@ -18,6 +18,9 @@ const addOrderItems = async (req, res) => {
       unpaidValue: totalPrice,
       paidValue: 0,
       userName,
+      phone,
+      address,
+      table,
     })
 
     const createdOrder = await order.save()
@@ -139,8 +142,39 @@ const getPendingOrders = async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = async (req, res) => {
-  const orders = await Order.find({})
-  res.json(orders)
+  try {
+    const { date } = req.query;
+    let query = {};
+
+    if (date) {
+      // Parse the date and create start/end of day
+      const startDate = new Date(date);
+      startDate.setHours(0, 0, 0, 0);
+      const endDate = new Date(date);
+      endDate.setHours(23, 59, 59, 999);
+
+      query.createdAt = {
+        $gte: startDate,
+        $lte: endDate
+      };
+    } else {
+      // Default to today's orders
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
+
+      query.createdAt = {
+        $gte: today,
+        $lte: endOfDay
+      };
+    }
+
+    const orders = await Order.find(query).sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
 // @desc    Update order items
@@ -152,12 +186,32 @@ const updateOrderItems = async (req, res) => {
     console.log('Received OrderItems:', req.body.OrderItems);
     console.log('Received isPaid:', req.body.isPaid);
     
-    const { OrderItems, isPaid, paidAt } = req.body
+    const { OrderItems, isPaid, paidAt, userName, phone, address, table } = req.body
     const order = await Order.findById(req.params.id)
 
     if (order) {
       console.log('Order found, current items:', order.OrderItems);
       console.log('Current paidValue:', order.paidValue, 'unpaidValue:', order.unpaidValue);
+      
+      // Update userName if provided
+      if (userName !== undefined) {
+        order.userName = userName
+      }
+      
+      // Update phone if provided
+      if (phone !== undefined) {
+        order.phone = phone
+      }
+      
+      // Update address if provided
+      if (address !== undefined) {
+        order.address = address
+      }
+      
+      // Update table if provided
+      if (table !== undefined) {
+        order.table = table
+      }
       
       // Update items if provided
       if (OrderItems) {
@@ -204,6 +258,26 @@ const updateOrderItems = async (req, res) => {
   }
 }
 
+// @desc    Delete order
+// @route   DELETE /api/orders/:id
+// @access  Private/Admin
+const deleteOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+
+    if (order) {
+      await Order.deleteOne({ _id: req.params.id })
+      res.json({ message: 'Order deleted successfully' })
+    } else {
+      res.status(404)
+      throw new Error('Order not found')
+    }
+  } catch (error) {
+    console.error('Error in deleteOrder:', error);
+    res.status(500).json({ message: error.message })
+  }
+}
+
 module.exports = {
   addOrderItems,
   getOrderById,
@@ -214,4 +288,5 @@ module.exports = {
   getPendingOrders,
   getOrders,
   updateOrderItems,
+  deleteOrder,
 }

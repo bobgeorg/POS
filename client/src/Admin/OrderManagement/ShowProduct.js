@@ -41,6 +41,11 @@ export default function ShowProduct(props) {
                                     </button>
                                 </div>
                             </div>
+                            {props.order.comment && (
+                                <div className="item-comment">
+                                    <strong>Special Instructions:</strong> {props.order.comment}
+                                </div>
+                            )}
                             {props.order.price && <div className="textRight">Price: €{props.order.price.toLocaleString()}</div>}
                         </Col>
                         <Col lg={1} className="delete-col">

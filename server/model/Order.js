@@ -8,6 +8,7 @@ const OrderSchema = new Schema({
       quantity: { type: Number, required: true },
       price: { type: Number, required: true },
       img: { type: String },
+      comment: { type: String },
     },
   ],
   userName: {
@@ -20,8 +21,8 @@ const OrderSchema = new Schema({
   address: {
     type: String,
   },
-  tableseat: {
-    type: String,
+  table: {
+    type: Number,
   },
   usingMethod: {
     type: String,
@@ -45,7 +46,7 @@ const OrderSchema = new Schema({
   orderStatus: {
     type: String,
     required: true,
-    enum: ['pending', 'preparing', 'ready', 'delivered', 'paid'],
+    enum: ['pending', 'ready', 'paid', 'completed', 'cancelled'],
     default: 'pending',
   },
   isPaid: {

@@ -38,13 +38,15 @@ const ProductInCart = (props) => {
                             &times;
                         </a> */}
           </div>
-          <div className="cart-item-content-add-list">
-            <div className="cart-item-content-add-item">
-              <p className="cart-item-content-add-item-title">
-                {props.item.description}
-              </p>
+          {props.item.comment && (
+            <div className="cart-item-content-add-list">
+              <div className="cart-item-content-add-item">
+                <p className="cart-item-content-add-item-title" style={{color: '#ff9800', fontStyle: 'italic', fontSize: '14px', fontWeight: '500', lineHeight: '1.4'}}>
+                  📝 {props.item.comment}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
           <div className="cart-item-content-bottom">
             <div className="cart-item-content-bottom-button">
               <i

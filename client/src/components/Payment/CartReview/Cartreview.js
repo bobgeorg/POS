@@ -11,13 +11,15 @@ const Cartreview = (props) => {
           <p className="cart-item-content-title">
             {props.index + 1}. {props.item.name}
           </p>
-          <div className="cart-item-content-add-list">
-            <div className="cart-item-content-add-item">
-              <p className="cart-item-content-add-item-title">
-                Description: {props.item.description}
-              </p>
+          {props.item.comment && (
+            <div className="cart-item-content-add-list">
+              <div className="cart-item-content-add-item">
+                <p className="cart-item-content-add-item-title" style={{color: '#ff9800', fontStyle: 'italic', fontSize: '15px', fontWeight: '500', lineHeight: '1.4'}}>
+                  📝 Special Instructions: {props.item.comment}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
           <div className="cart-item-content-bottom">
             <div className="cart-item-content-bottom-button">
               Quantity: {number}

@@ -6,8 +6,12 @@ export const CLEAR_CART = "CLEAR_CART";
 const addProductToCart = (product, state) => {
   console.log("adding product", product);
   const updatedCart = [...state.cart];
+  
+  // If product has a comment, treat it as a unique item (don't merge with existing)
+  // If no comment, merge with existing product without comment
   const updatedItemIndex = updatedCart.findIndex(
-    (item) => item._id === product._id
+    (item) => item._id === product._id && 
+    (!product.comment || item.comment === product.comment)
   );
 
   if (updatedItemIndex < 0) {
