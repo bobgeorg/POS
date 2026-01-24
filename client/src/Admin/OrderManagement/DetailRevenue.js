@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from 'react-grid-system';
 import Popup from "reactjs-popup";
-import { FiXCircle } from 'react-icons/fi';
+import { FiXCircle, FiTrash2, FiEdit, FiMessageSquare, FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { FcOk } from "react-icons/fc";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import DetailOrder from './DetailOrder';
@@ -18,7 +18,7 @@ export default function DetailRevenue(props) {
     const [orderItems, setOrderItems] = useState([]);
     const [availableProducts, setAvailableProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState('');
-    const [pendingPaymentStatus, setPendingPaymentStatus] = useState(props.order.isPaid);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     // Calculate total price based on current order items
     const calculateTotalPrice = () => {
@@ -73,9 +73,8 @@ export default function DetailRevenue(props) {
     const handleDeleteItem = (index) => {
         const updatedItems = orderItems.filter((_, i) => i !== index);
         setOrderItems(updatedItems);
-        // Reset status to pending and payment to unpaid when items change
+        // Reset status to pending when items change
         setPendingStatus('pending');
-        setPendingPaymentStatus(false);
     }
 
     const handleQuantityChange = (index, newQuantity) => {
@@ -84,9 +83,8 @@ export default function DetailRevenue(props) {
             i === index ? { ...item, quantity: parseInt(newQuantity) } : { ...item }
         );
         setOrderItems(updatedItems);
-        // Reset status to pending and payment to unpaid when items change
+        // Reset status to pending when items change
         setPendingStatus('pending');
-        setPendingPaymentStatus(false);
     }
 
     const handleAddItem = () => {
@@ -121,9 +119,8 @@ export default function DetailRevenue(props) {
             setOrderItems([...orderItems, newItem]);
         }
         
-        // Reset status to pending and payment to unpaid when items change
+        // Reset status to pending when items change
         setPendingStatus('pending');
-        setPendingPaymentStatus(false);
         
         // Reset selection
         setSelectedProduct('');
@@ -138,7 +135,6 @@ export default function DetailRevenue(props) {
             // Prepare update payload
             const hasItemChanges = JSON.stringify(orderItems) !== JSON.stringify(props.order.OrderItems);
             const hasStatusChange = pendingStatus !== props.order.orderStatus;
-            const hasPaymentChange = pendingPaymentStatus !== props.order.isPaid;
             
             // Update order status if changed
             if (hasStatusChange) {
@@ -146,20 +142,11 @@ export default function DetailRevenue(props) {
                 await updateOrderStatus(props.order._id, pendingStatus);
             }
             
-            // Update order items and/or payment status in a single request
-            if (hasItemChanges || hasPaymentChange) {
-                const updatePayload = {};
-                
-                if (hasItemChanges) {
-                    console.log('Including order items in update');
-                    updatePayload.OrderItems = orderItems;
-                }
-                
-                if (hasPaymentChange) {
-                    console.log('Including payment status in update:', pendingPaymentStatus);
-                    updatePayload.isPaid = pendingPaymentStatus;
-                    updatePayload.paidAt = pendingPaymentStatus ? new Date() : null;
-                }
+            // Update order items if changed
+            if (hasItemChanges) {
+                const updatePayload = {
+                    OrderItems: orderItems
+                };
                 
                 console.log('Updating order with payload:', updatePayload);
                 const response = await axios.put(`${API_BASE_URL}/api/orders/${props.order._id}`, updatePayload);
@@ -170,11 +157,10 @@ export default function DetailRevenue(props) {
             setIsOpen(false);
             close();
             
-            // Small delay to ensure modal closes smoothly before reload
-            console.log('Reloading page...');
-            setTimeout(() => {
-                window.location.reload(false);
-            }, 100);
+            // Refresh orders without page reload
+            if (props.onOrderUpdate) {
+                props.onOrderUpdate();
+            }
         } catch (error) {
             console.error('Error updating order:', error);
             console.error('Error details:', error.response?.data);
@@ -184,7 +170,6 @@ export default function DetailRevenue(props) {
 
     const handleCancel = (close) => {
         setPendingStatus(props.order.orderStatus || 'pending');
-        setPendingPaymentStatus(props.order.isPaid);
         setOrderItems(props.order.OrderItems.map(item => ({ ...item })));
         setIsOpen(false);
         close();
@@ -192,7 +177,6 @@ export default function DetailRevenue(props) {
 
     const handleOpen = () => {
         setPendingStatus(props.order.orderStatus || 'pending');
-        setPendingPaymentStatus(props.order.isPaid);
         setOrderItems(props.order.OrderItems.map(item => ({ ...item })));
         setIsOpen(true);
     }
@@ -200,22 +184,70 @@ export default function DetailRevenue(props) {
     const cycleStatus = async (e, newStatus) => {
         e.stopPropagation();
         if (!newStatus) {
-            const statuses = ['pending', 'preparing', 'ready', 'delivered'];
+            const statuses = ['pending', 'ready', 'paid', 'completed', 'cancelled'];
             const currentIndex = statuses.indexOf(props.order.orderStatus || 'pending');
             newStatus = statuses[(currentIndex + 1) % statuses.length];
         }
-        await updateOrderStatus(props.order._id, newStatus);
-        window.location.reload(false);
+        try {
+            await updateOrderStatus(props.order._id, newStatus);
+            // Refresh orders without page reload
+            if (props.onOrderUpdate) {
+                props.onOrderUpdate();
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    }
+    
+    const handleDeleteOrder = async (orderId) => {
+        try {
+            await axios.delete(`${API_BASE_URL}/api/orders/${orderId}`);
+            // Refresh orders without page reload
+            if (props.onOrderUpdate) {
+                props.onOrderUpdate();
+            }
+        } catch (error) {
+            console.error('Error deleting order:', error);
+            alert('Failed to delete order: ' + (error.response?.data?.message || error.message));
+        }
     }
     
     return (
-
-            <Popup
-                trigger={
-                    <Container fluid>
-                    <Row className="elementlist">
-                        <Col sm={1.5}> <h2 className="element">{props.order.userName}</h2></Col>
-                        <Col sm={2}> <h2 className="element">
+        <>
+            <Container fluid>
+            <Row className="elementlist">
+                <Col sm={0.5}>
+                    <button 
+                        className="expand-btn"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsExpanded(!isExpanded);
+                        }}
+                        title={isExpanded ? "Collapse items" : "Expand items"}
+                    >
+                        {isExpanded ? <FiChevronDown size={16} /> : <FiChevronRight size={16} />}
+                    </button>
+                </Col>
+                <Col sm={1.7}> 
+                    <div className="element customer-info">
+                        <span className="customer-name">{props.order.userName}</span>
+                        {props.order.OrderItems?.some(item => item.comment) && (
+                            <FiMessageSquare 
+                                size={14} 
+                                style={{ marginLeft: '6px', color: '#007bff', verticalAlign: 'middle' }} 
+                                title="Order has special instructions"
+                            />
+                        )}
+                    </div>
+                </Col>
+                <Col sm={1.3}> <h2 className="element order-time">
+                            {new Date(props.order.createdAt).toLocaleTimeString('en-US', { 
+                                hour: '2-digit', 
+                                minute: '2-digit',
+                                hour12: false 
+                            })}
+                        </h2></Col>
+                        <Col sm={2.3}> <h2 className="element">
                             <select 
                                 className={`order-status-dropdown status-${props.order.orderStatus}`}
                                 value={props.order.orderStatus || 'pending'}
@@ -226,33 +258,95 @@ export default function DetailRevenue(props) {
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <option value="pending">Pending</option>
-                                <option value="preparing">Preparing</option>
                                 <option value="ready">Ready</option>
-                                <option value="delivered">Delivered</option>
+                                <option value="paid">Paid</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
                             </select>
                         </h2></Col>
-                        <Col sm={1.8}> <h2 className="element">
-                            {props.order.isPaid ? <FcOk  className="iconRevenue" size={20} color="green"/> : <AiOutlineCloseCircle size={20} color="red"/>}</h2>
+                        <Col sm={1.7}> <h2 className="element price-paid">€{(props.order.paidValue || 0).toLocaleString()}</h2></Col>
+                        <Col sm={1.7}> <h2 className="element price-unpaid">€{(props.order.unpaidValue || 0).toLocaleString()}</h2></Col>
+                        <Col sm={1.7}> <h2 className="element price-total">€{props.order.totalPrice.toLocaleString()}</h2></Col>
+                        <Col sm={1.1}> 
+                            <div className="action-buttons">
+                                <button 
+                                    className="admin-edit-order-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleOpen();
+                                    }}
+                                    title="Edit order"
+                                >
+                                    <FiEdit size={18} />
+                                </button>
+                                <button 
+                                    className="admin-delete-order-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (window.confirm('Are you sure you want to delete this order?')) {
+                                            handleDeleteOrder(props.order._id);
+                                        }
+                                    }}
+                                    title="Delete order"
+                                >
+                                    <FiTrash2 size={18} />
+                                </button>
+                            </div>
                         </Col>
-                        <Col sm={3.2}> <h2 className="element">{props.order.usingMethod}</h2></Col>
-                        <Col sm={1.3}> <h2 className="element price-paid">€{(props.order.paidValue || 0).toLocaleString()}</h2></Col>
-                        <Col sm={1.3}> <h2 className="element price-unpaid">€{(props.order.unpaidValue || 0).toLocaleString()}</h2></Col>
-                        <Col sm={1.3}> <h2 className="oderprice">€{props.order.totalPrice.toLocaleString()}</h2></Col>
                     </Row>
+                    {isExpanded && (
+                        <Row className="expanded-items-grid">
+                            <Col sm={12}>
+                                <div className="items-detail-table">
+                                    <table className="items-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th>Item Name</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Comments</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {props.order.OrderItems && props.order.OrderItems.map((item, idx) => (
+                                                <tr key={idx}>
+                                                    <td>
+                                                        <img 
+                                                            src={item.img} 
+                                                            alt={item.name} 
+                                                            className="item-thumbnail"
+                                                        />
+                                                    </td>
+                                                    <td className="item-name">{item.name}</td>
+                                                    <td className="item-quantity">x{item.quantity}</td>
+                                                    <td className="item-price">€{(item.price * item.quantity).toLocaleString()}</td>
+                                                    <td className="item-comment">{item.comment || '-'}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </Col>
+                        </Row>
+                    )}
                     </Container>
-                }
+            
+            <Popup
+                trigger={<div style={{display: 'none'}}></div>}
                 modal
                 contentStyle = {contentStyle}
                 open={isOpen}
-                onOpen={handleOpen}
                 onClose={() => setIsOpen(false)}
-                >
+            >
                 {close => (
-                    <div className="modal">
-                        <div className="header">
+                    <div className="modal modern-modal">
+                        <div className="modal-header-modern">
                             <h2>Order Details - {props.order.userName}</h2>
+                            <button className="close-button-modern" onClick={() => handleCancel(close)}>
+                                <FiXCircle size={24}/>
+                            </button>
                         </div>
-                        <a className="close" onClick={() => handleCancel(close)} href><FiXCircle size={20}/></a>
                         <div className="content">
                             <div className="OrderPopUp">
                                 <div className="order-info-form">
@@ -262,12 +356,6 @@ export default function DetailRevenue(props) {
                                             <input type="text" value={props.order.userName} disabled className="form-input-disabled" />
                                         </div>
                                         <div className="form-group">
-                                            <label>Payment Method</label>
-                                            <input type="text" value={props.order.usingMethod} disabled className="form-input-disabled" />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
                                             <label>Order Status</label>
                                             <select 
                                                 className="form-select"
@@ -275,52 +363,38 @@ export default function DetailRevenue(props) {
                                                 onChange={(e) => handleStatusChange(e.target.value)}
                                             >
                                                 <option value="pending">Pending</option>
-                                                <option value="preparing">Preparing</option>
                                                 <option value="ready">Ready</option>
-                                                <option value="delivered">Delivered</option>
-                                            </select>
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Payment Status</label>
-                                            <select 
-                                                className="form-select"
-                                                value={pendingPaymentStatus ? 'paid' : 'unpaid'}
-                                                onChange={(e) => {
-                                                    setPendingPaymentStatus(e.target.value === 'paid');
-                                                }}
-                                            >
-                                                <option value="unpaid">Unpaid</option>
                                                 <option value="paid">Paid</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Paid Amount</label>
-                                            <div className="value-display paid-display">€{(props.order.paidValue || 0).toLocaleString()}</div>
+                                    <div className="form-row payment-summary">
+                                        <div className="form-group-compact">
+                                            <label>Paid</label>
+                                            <div className="value-compact paid">€{(props.order.paidValue || 0).toLocaleString()}</div>
                                         </div>
-                                        <div className="form-group">
-                                            <label>Unpaid Amount</label>
-                                            <div className="value-display unpaid-display">€{calculateUnpaidValue().toLocaleString()}</div>
+                                        <div className="form-group-compact">
+                                            <label>Unpaid</label>
+                                            <div className="value-compact unpaid">€{calculateUnpaidValue().toLocaleString()}</div>
                                         </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group full-width">
-                                            <label>Total Price</label>
-                                            <div className="price-display">€{calculateTotalPrice().toLocaleString()}</div>
+                                        <div className="form-group-compact">
+                                            <label>Total</label>
+                                            <div className="value-compact total">€{calculateTotalPrice().toLocaleString()}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="order-items-section">
-                                    <h3 className="section-title">Order Items</h3>
-                                    <div className="add-item-section">
-                                        <div className="add-item-form">
+                                    <div className="section-header">
+                                        <h3 className="section-title">Order Items</h3>
+                                        <div className="add-item-compact">
                                             <select 
-                                                className="form-select product-select"
+                                                className="select-compact"
                                                 value={selectedProduct}
                                                 onChange={(e) => setSelectedProduct(e.target.value)}
                                             >
-                                                <option value="">Select product to add...</option>
+                                                <option value="">+ Add item...</option>
                                                 {availableProducts.map(product => (
                                                     <option key={product._id} value={product._id}>
                                                         {product.name} - €{product.price.toLocaleString()}
@@ -328,10 +402,10 @@ export default function DetailRevenue(props) {
                                                 ))}
                                             </select>
                                             <button 
-                                                className="add-item-btn"
+                                                className="btn-add-compact"
                                                 onClick={handleAddItem}
                                             >
-                                                Add Item
+                                                +
                                             </button>
                                         </div>
                                     </div>
@@ -343,23 +417,24 @@ export default function DetailRevenue(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="modal-footer">
+                        <div className="modal-footer-modern">
                             <button 
-                                className="buttonOk" 
+                                className="button-save-modern" 
                                 onClick={() => handleOk(close)}
                             >
-                                Save
+                                💾 Save Changes
                             </button>
                             <button 
-                                className="buttonCancel" 
+                                className="button-cancel-modern" 
                                 onClick={() => handleCancel(close)}
                             >
-                                Cancel
+                                ✕ Cancel
                             </button>
                         </div>
                     </div>
                 )}
-            </Popup> 
+            </Popup>
+        </>
     )
 }
 
