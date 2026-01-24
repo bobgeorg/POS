@@ -51,14 +51,14 @@ const SingleProduct = ({ product, index }) => {
   const handleRemove = () => {
     swal({
       title: "Are you sure?",
-      text: "Bạn sẽ không thể khôi phục nếu sử dụng hành động này.",
+      text: "You won't be able to recover this product if you proceed.",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
         removeProduct(_id);
-        swal("Sản phẩm đã được xóa", {
+        swal("Product has been deleted", {
           icon: "success",
         });
       }
@@ -76,7 +76,7 @@ const SingleProduct = ({ product, index }) => {
     dataForm.append("img", productUpdate.img);
     updateProduct(productUpdate._id, dataForm);
     closeModal();
-    swal("Sửa thành công", "", "success");
+    swal("Updated Successfully", "", "success");
   };
   return (
     <>
@@ -100,7 +100,7 @@ const SingleProduct = ({ product, index }) => {
           {description}
         </td>
         <td onClick={openModal} className="listProducts-content-row-item">
-          {price * 1000}
+          €{price.toFixed(2)}
         </td>
         <td onClick={openModal} className="listProducts-content-row-item">
           <img src={img} alt="" className="listProducts-content-row-item-img" />
@@ -132,7 +132,7 @@ const SingleProduct = ({ product, index }) => {
         contentLabel="Example Modal"
       >
         <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
-          {isDisable ? "Thông tin sản phẩm" : "Chế độ chỉnh sửa"}
+          {isDisable ? "Product Information" : "Edit Mode"}
         </h2>
         <button className="modal-close" onClick={closeModal}>
           x
@@ -143,7 +143,7 @@ const SingleProduct = ({ product, index }) => {
               <div className="input-container input-container-img">
                 <ButtonUpload
                   isDisable={isDisable}
-                  text="Chọn ảnh"
+                  text="Choose Image"
                   src={img}
                   setProductUpdate={setProductUpdate}
                   productUpdate={productUpdate}
@@ -153,7 +153,7 @@ const SingleProduct = ({ product, index }) => {
             <div className="input-container-both">
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Tên
+                  Name
                 </label>
                 <input
                   disabled={isDisable}
@@ -167,7 +167,7 @@ const SingleProduct = ({ product, index }) => {
               </div>
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Số lượng
+                  Category
                 </label>
                 <select
                   disabled={isDisable}
@@ -183,7 +183,7 @@ const SingleProduct = ({ product, index }) => {
               </div>
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Giá
+                  Price (€)
                 </label>
                 <input
                   disabled={isDisable}
@@ -197,7 +197,7 @@ const SingleProduct = ({ product, index }) => {
               </div>
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Số lượng
+                  Stock
                 </label>
                 <input
                   disabled={isDisable}
@@ -211,10 +211,10 @@ const SingleProduct = ({ product, index }) => {
               </div>
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Mô tả
+                  Description
                 </label>
                 <textarea
-                  disabled={true}
+                  disabled={isDisable}
                   type="text"
                   name="description"
                   className="input-box input-box-textarea"
@@ -229,7 +229,7 @@ const SingleProduct = ({ product, index }) => {
             style={{ display: isDisable ? "none" : "block" }}
             className="input-box input-box-submit"
             type="submit"
-            value="Lưu"
+            value="Save"
           />
           {/* <button>the modal</button> */}
         </form>

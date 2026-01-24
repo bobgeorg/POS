@@ -234,6 +234,17 @@ code {
 .filter-container .slick-slider {
   flex: 1;
   margin: 0 20px;
+  min-width: 0; /* Allow flex item to shrink below content size */
+  overflow: hidden; /* Prevent content overflow */
+}
+
+.filter-container .slick-list {
+  overflow: hidden;
+}
+
+.filter-container .slick-track {
+  display: flex !important;
+  align-items: center;
 }
 
 /* .button-back{
@@ -305,6 +316,9 @@ code {
   transition: all 0.2s ease;
   margin: 10px;
   list-style: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 .test {
   animation: spinner both 3s;
@@ -327,18 +341,28 @@ code {
 .filter-item-img {
   width: 70px;
   height: 70px;
+  max-width: 70px;
+  max-height: 70px;
   object-fit: cover;
   border-radius: 50%;
   outline: none;
   border: none;
   margin-top: 16px;
   margin: 16px auto 0;
+  display: block;
+  flex-shrink: 0;
 }
 .filter-item-title {
   word-wrap: break-word;
   margin-bottom: 16px;
   /* line-height: 0; */
   padding-bottom: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
 }
 /* .button-filter{
   display: inline-block;

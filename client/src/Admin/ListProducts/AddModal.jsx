@@ -56,8 +56,8 @@ const AddModal = () => {
       newProduct.count === 0
     ) {
       swal(
-        "Điền đúng hộ mình",
-        "Bạn cần điền đầy đủ hoặc chính xác thông tin",
+        "Please Fill Correctly",
+        "You need to fill in all fields accurately",
         "warning"
       );
       return;
@@ -86,7 +86,7 @@ const AddModal = () => {
     <>
       <button onClick={openModal} className="listProducts-heading-add-product">
         <i className="fas fa-plus"></i>
-        Thêm sản phẩm
+        Add Product
       </button>
       <Modal
         // style={{ width: 600 }}
@@ -98,7 +98,7 @@ const AddModal = () => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Thêm sản phẩm</h2>
+        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Add Product</h2>
         <button className="modal-close" onClick={closeModal}>
           x
         </button>
@@ -107,7 +107,7 @@ const AddModal = () => {
             <div className="input-container-both">
               <div className="input-container input-container-img">
                 <ButtonUpload
-                  text="Chọn ảnh"
+                  text="Choose Image"
                   src={img}
                   setProductUpdate={setNewProduct}
                   productUpdate={newProduct}
@@ -117,7 +117,7 @@ const AddModal = () => {
             <div className="input-container-both">
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Tên
+                  Name
                 </label>
                 <input
                   className="input-box"
@@ -130,7 +130,7 @@ const AddModal = () => {
               </div>
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Loại
+                  Category
                 </label>
                 <select
                   required
@@ -154,7 +154,7 @@ const AddModal = () => {
               </div>
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Giá(Ngàn)
+                  Price (€)
                 </label>
                 <input
                   className="input-box"
@@ -167,7 +167,7 @@ const AddModal = () => {
               </div>
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Số lượng
+                  Stock
                 </label>
                 <input
                   className="input-box"
@@ -180,7 +180,7 @@ const AddModal = () => {
               </div>
               <div className="input-container">
                 <label htmlFor="" className="input-label">
-                  Mô tả
+                  Description
                 </label>
                 <textarea
                   type="text"
@@ -196,7 +196,7 @@ const AddModal = () => {
           <input
             className="input-box input-box-submit"
             type="submit"
-            value="Thêm"
+            value="Add"
           />
           {/* <button>the modal</button> */}
         </form>

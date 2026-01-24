@@ -73,7 +73,7 @@ router.post("/", upload.single("img"), async (req, res) => {
       price,
       count,
       description,
-      img: `http://localhost:5000/${req.file.path}`,
+      img: `/${req.file.path.replace(/\\/g, '/')}`,
     });
     await newProduct.save();
     res.send({
@@ -105,7 +105,7 @@ router.put("/:id", upload.single("img"), async (req, res) => {
       price,
       count,
       description,
-      img: req.file ? `http://localhost:5000/${req.file.path}` : req.body.img,
+      img: req.file ? `/${req.file.path.replace(/\\/g, '/')}` : req.body.img,
     };
     const conditionUpdated = { _id: req.params.id };
     updateProduct = await Product.findOneAndUpdate(

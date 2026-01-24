@@ -2,6 +2,7 @@ import { createContext, useReducer } from "react";
 import reducer from "./reducer";
 import axios from "axios";
 import API_BASE_URL from "../config/api";
+import swal from "sweetalert";
 import {
   PRODUCT_LOAD_SUCCESS,
   SET_TYPE_PRODUCT,
@@ -19,6 +20,7 @@ const AdminProvider = ({ children }) => {
     isLoading: true,
   });
   const { products, typeProducts, isLoading } = stateAdmin;
+  
   const getProducts = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/product`);
@@ -38,9 +40,9 @@ const AdminProvider = ({ children }) => {
       console.log(error);
     }
   };
+  
   const addProduct = async (newProduct) => {
     try {
-      // console.log(newProduct);
       const res = await axios.post(
         `${API_BASE_URL}/api/product`,
         newProduct
@@ -51,12 +53,19 @@ const AdminProvider = ({ children }) => {
           payload: res.data.product,
         });
         getTypeProduct(res.data.product);
+        return { success: true };
+      } else {
+        swal("Error", res.data.message || "Failed to add product", "error");
+        return { success: false, message: res.data.message };
       }
-      // console.log(res);
     } catch (error) {
       console.log(error);
+      const errorMsg = error.response?.data?.message || "Failed to add product. Please try again.";
+      swal("Error", errorMsg, "error");
+      return { success: false, message: errorMsg };
     }
   };
+  
   const getTypeProducts = async () => {
     try {
       const res = await axios.get(`${API_BASE_URL}/api/typeproduct`);
@@ -70,13 +79,12 @@ const AdminProvider = ({ children }) => {
           type: LOADED,
           payload: true,
         });
-        // return res.data.typeProduct;
       }
     } catch (error) {
       console.log(error);
-      // return;
     }
   };
+  
   const getTypeProduct = async (product) => {
     try {
       const res = await axios.get(
@@ -91,24 +99,31 @@ const AdminProvider = ({ children }) => {
             data: res.data.typeProduct.name,
           },
         });
-        // return res.data.typeProduct;
       }
     } catch (error) {
       console.log(error);
-      // return;
     }
   };
+  
   const removeProduct = async (id) => {
     try {
       const res = await axios.delete(`${API_BASE_URL}/api/product/${id}`);
       if (res.data.success) {
         console.log(res.data.product);
         getProducts();
+        return { success: true };
+      } else {
+        swal("Error", res.data.message || "Failed to delete product", "error");
+        return { success: false, message: res.data.message };
       }
     } catch (error) {
       console.log(error);
+      const errorMsg = error.response?.data?.message || "Failed to delete product. Please try again.";
+      swal("Error", errorMsg, "error");
+      return { success: false, message: errorMsg };
     }
   };
+  
   const removeTypeProduct = async (id) => {
     try {
       const res = await axios.delete(
@@ -117,17 +132,27 @@ const AdminProvider = ({ children }) => {
       if (res.data.success) {
         console.log(res.data.product);
         getTypeProducts();
+        return { success: true };
+      } else {
+        swal("Error", res.data.message || "Failed to delete category", "error");
+        return { success: false, message: res.data.message };
       }
     } catch (error) {
       console.log(error);
+      const errorMsg = error.response?.data?.message || "Failed to delete category. Please try again.";
+      swal("Error", errorMsg, "error");
+      return { success: false, message: errorMsg };
     }
   };
+  
   const getProductForIndex = (index) => {
     return products[index];
   };
+  
   const getTypeProductForIndex = (index) => {
     return typeProducts[index];
   };
+  
   const updateProduct = async (id, dataForm) => {
     try {
       const res = await axios.put(
@@ -143,11 +168,19 @@ const AdminProvider = ({ children }) => {
           },
         });
         getTypeProduct(res.data.product);
+        return { success: true };
+      } else {
+        swal("Error", res.data.message || "Failed to update product", "error");
+        return { success: false, message: res.data.message };
       }
     } catch (error) {
       console.log(error);
+      const errorMsg = error.response?.data?.message || "Failed to update product. Please try again.";
+      swal("Error", errorMsg, "error");
+      return { success: false, message: errorMsg };
     }
   };
+  
   const addTypeProduct = async (dataForm) => {
     try {
       const res = await axios.post(
@@ -156,9 +189,40 @@ const AdminProvider = ({ children }) => {
       );
       if (res.data.success) {
         getTypeProducts();
+        return { success: true };
+      } else {
+        swal("Error", res.data.message || "Failed to add category", "error");
+        return { success: false, message: res.data.message };
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      const errorMsg = error.response?.data?.message || "Failed to add category. Please try again.";
+      swal("Error", errorMsg, "error");
+      return { success: false, message: errorMsg };
+    }
   };
+  
+  const updateTypeProduct = async (id, dataForm) => {
+    try {
+      const res = await axios.put(
+        `${API_BASE_URL}/api/typeproduct/${id}`,
+        dataForm
+      );
+      if (res.data.success) {
+        getTypeProducts();
+        return { success: true };
+      } else {
+        swal("Error", res.data.message || "Failed to update category", "error");
+        return { success: false, message: res.data.message };
+      }
+    } catch (error) {
+      console.log(error);
+      const errorMsg = error.response?.data?.message || "Failed to update category. Please try again.";
+      swal("Error", errorMsg, "error");
+      return { success: false, message: errorMsg };
+    }
+  };
+  
   const adminValue = {
     isLoading,
     products,
@@ -173,7 +237,9 @@ const AdminProvider = ({ children }) => {
     updateProduct,
     removeTypeProduct,
     addTypeProduct,
+    updateTypeProduct,
   };
+  
   return (
     <adminContext.Provider value={adminValue}>{children}</adminContext.Provider>
   );

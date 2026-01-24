@@ -44,37 +44,48 @@ const Filter = ({ x, Foods, Typess }) => {
 
   const settings = {
     className: "section-outstanding__slider hoangkui-css-filter",
-    slidesToShow: 4,
+    slidesToShow: Math.min(4, Typess.length), // Don't show more slides than we have items
     slidesToScroll: 1,
     arrows: false,
-    infinite: true,
+    infinite: Typess.length > 4, // Only enable infinite if we have more items than visible
     rows: 1,
     centered: "true",
+    swipe: Typess.length > 4, // Only enable swipe if infinite
+    draggable: Typess.length > 4, // Only enable drag if infinite
     // centerPadding:0,
     responsive: [
       {
         breakpoint: 1198,
         settings: {
           className: "stick-list-cc",
-          slidesToShow: 3,
+          slidesToShow: Math.min(3, Typess.length),
           slidesToScroll: 1,
           rows: 1,
+          infinite: Typess.length > 3,
+          swipe: Typess.length > 3,
+          draggable: Typess.length > 3,
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: Math.min(2, Typess.length),
           slidesToScroll: 1,
           rows: 1,
+          infinite: Typess.length > 2,
+          swipe: Typess.length > 2,
+          draggable: Typess.length > 2,
         },
       },
       {
         breakpoint: 576,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: Math.min(2, Typess.length),
           slidesToScroll: 1,
           rows: 1,
+          infinite: Typess.length > 2,
+          swipe: Typess.length > 2,
+          draggable: Typess.length > 2,
         },
       },
       {
@@ -83,6 +94,9 @@ const Filter = ({ x, Foods, Typess }) => {
           slidesToShow: 1,
           slidesToScroll: 1,
           rows: 1,
+          infinite: Typess.length > 1,
+          swipe: Typess.length > 1,
+          draggable: Typess.length > 1,
         },
       },
     ],

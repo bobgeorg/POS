@@ -25,25 +25,26 @@ const ListProducts = () => {
   }, []);
   const [selectFilter, setSelectFilter] = useState(-1);
   // if (!isLoading) filter = <Filter />;
-  const handleRemoveType = () => {
+  const handleRemoveType = async () => {
     swal({
       title: "Are you sure?",
-      text: "Bạn sẽ xóa luôn tất cả các sản phẩm ở dưới?",
+      text: "This will permanently delete all products under this category?",
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
-        products.map((product) => {
-          if (product.catelory === typeProducts[selectFilter]._id) {
-            removeProduct(product._id);
-          }
-        });
-        removeTypeProduct(typeProducts[selectFilter]._id);
-        setSelectFilter(-1);
-        swal("Xóa thành công", {
-          icon: "success",
-        });
+        // Delete the category
+        const result = await removeTypeProduct(typeProducts[selectFilter]._id);
+        
+        // Only show success if the operation succeeded
+        if (result && result.success) {
+          setSelectFilter(-1);
+          swal("Deleted Successfully", {
+            icon: "success",
+          });
+        }
+        // Error message is already shown by AdminContext
       }
     });
   };
@@ -99,7 +100,7 @@ const ListProducts = () => {
             onClick={handleRemoveType}
             className="listProducts-heading-add-product"
           >
-            Xóa loại này
+            Delete Category
           </button>
         )}
         <AddModal />
@@ -109,13 +110,13 @@ const ListProducts = () => {
           <tbody className="tbody-nth">
             <tr className="listProducts-content-row-heading-table">
               <th className="listProducts-content-row-heading">SKU</th>
-              <th className="listProducts-content-row-heading">Tên sản phẩm</th>
+              <th className="listProducts-content-row-heading">Product Name</th>
               <th className="listProducts-content-row-heading">
-                Kiểu sản phẩm
+                Category
               </th>
-              <th className="listProducts-content-row-heading">Số lượng còn</th>
-              <th className="listProducts-content-row-heading">Mô tả</th>
-              <th className="listProducts-content-row-heading">Giá</th>
+              <th className="listProducts-content-row-heading">Stock</th>
+              <th className="listProducts-content-row-heading">Description</th>
+              <th className="listProducts-content-row-heading">Price (€)</th>
               <th className="listProducts-content-row-heading"></th>
               <th className="listProducts-content-row-heading">
                 <button className="listProducts-content-row-remove">

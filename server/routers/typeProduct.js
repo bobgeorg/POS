@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const TypeProduct = require("../model/TypeProduct");
+const Product = require("../model/Product");
 
 const multer = require("multer");
 
@@ -28,6 +30,11 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
+const typeHasProducts = async (typeId) => {
+  const products = await Product.find({ catelory: mongoose.Types.ObjectId(typeId) });
+  return products.length > 0;
+}
+
 // GET http://localhost:5000/api/typeproduct
 // Lay all product
 router.get("/", async (req, res) => {
@@ -53,7 +60,7 @@ router.post("/", upload.single("img"), async (req, res) => {
     // All good
     const newTypeProduct = new TypeProduct({
       name,
-      img: `http://localhost:5000/${req.file.path}`,
+      img: `/${req.file.path.replace(/\\/g, '/')}`,
     });
     await newTypeProduct.save();
     res.send({
@@ -69,8 +76,8 @@ router.post("/", upload.single("img"), async (req, res) => {
 
 // PUT http://localhost:5000/api/typeproduct/id
 // Update typeproduct len server
-router.put("/:id", async (req, res) => {
-  const { name, img } = req.body;
+router.put("/:id", upload.single("img"), async (req, res) => {
+  const { name } = req.body;
   // Check name
   if (!name)
     return res
@@ -79,11 +86,19 @@ router.put("/:id", async (req, res) => {
 
   console.log(req.params.id);
   try {
-    // All good
+    // Build update object
     let updateTypeProduct = {
       name,
-      img,
     };
+    
+    // Only update image if a new file was uploaded
+    if (req.file) {
+      updateTypeProduct.img = `/${req.file.path.replace(/\\/g, '/')}`;
+    } else if (req.body.img) {
+      // Keep existing image URL if provided
+      updateTypeProduct.img = req.body.img;
+    }
+    
     const conditionUpdated = { _id: req.params.id };
     updateTypeProduct = await TypeProduct.findOneAndUpdate(
       conditionUpdated,
@@ -104,8 +119,16 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
+    // Check if type has products BEFORE deleting
+    if (await typeHasProducts(req.params.id)) {
+      return res.status(400)
+                .json({ success: false, 
+                message: "Cannot delete type product because it has associated products." });
+    }
+    
     const conditionUpdated = { _id: req.params.id };
     const typeProductDeleted = await TypeProduct.deleteOne(conditionUpdated);
+    
     res.send({
       success: true,
       message: "delete done",
