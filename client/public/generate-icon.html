@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Sourmena POS Icon</title>
+</head>
+<body>
+    <h1>Sourmena POS Icon Generator</h1>
+    <canvas id="canvas192" width="192" height="192"></canvas>
+    <canvas id="canvas512" width="512" height="512"></canvas>
+    <canvas id="canvas32" width="32" height="32"></canvas>
+    
+    <script>
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            
+            // Gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Draw restaurant dome/cloche
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const radius = size * 0.35;
+            
+            // Cloche dome
+            ctx.arc(centerX, centerY, radius, Math.PI, 0, false);
+            ctx.lineTo(centerX + radius, centerY + radius * 0.3);
+            ctx.lineTo(centerX - radius, centerY + radius * 0.3);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Handle on top
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - radius, radius * 0.2, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Base plate
+            ctx.fillStyle = 'white';
+            ctx.fillRect(centerX - radius * 1.2, centerY + radius * 0.3, radius * 2.4, radius * 0.15);
+        }
+        
+        // Generate all sizes
+        drawIcon(document.getElementById('canvas192'), 192);
+        drawIcon(document.getElementById('canvas512'), 512);
+        drawIcon(document.getElementById('canvas32'), 32);
+        
+        console.log('Icons generated! Right-click each canvas and "Save image as..."');
+        console.log('Save canvas192 as logo192.png');
+        console.log('Save canvas512 as logo512.png');
+        console.log('Save canvas32 as favicon-32x32.png (then convert to .ico)');
+    </script>
+    
+    <div style="margin-top: 20px; font-family: Arial;">
+        <h2>Instructions:</h2>
+        <ol>
+            <li>Right-click on each canvas above</li>
+            <li>Select "Save image as..."</li>
+            <li>Save as logo192.png, logo512.png respectively</li>
+            <li>For favicon.ico, use an online converter or use the PNG file</li>
+        </ol>
+        <p>Or use the PowerShell script to generate them automatically.</p>
+    </div>
+</body>
+</html>
