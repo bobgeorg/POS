@@ -8,9 +8,12 @@
     "build-client": "cd client && npm install && set NODE_OPTIONS=--openssl-legacy-provider && npm run build",
     "build-if-needed": "node build-if-needed.js",
     "start": "npm run update-ip && npm run build-if-needed && cd server && node server",
+    "start-https": "set USE_HTTPS=true&& npm run update-ip && npm run build-if-needed && cd server && node server",
     "server": "npm run update-ip && cd server && nodemon server",
+    "server-https": "set USE_HTTPS=true&& npm run update-ip && cd server && nodemon server",
     "client": "cd client && npm run start",
     "dev": "npm run update-ip && concurrently \"npm run server\" \"npm run client\"",
+    "dev-https": "set USE_HTTPS=true&& npm run update-ip && concurrently \"npm run server\" \"npm run client\"",
     "init-config": "cd server && node init-config.js",
     "heroku-postbuild": "cd client && npm install && CI=false npm run build"
   },

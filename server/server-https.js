@@ -1,44 +1,26 @@
 const express = require('express');
 const https = require('https');
-const http = require('http');
 const fs = require('fs');
 const cors = require('cors');
 const path = require('path');
 const os = require('os');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const connectDB = require('./config/db');
 const productRouter = require('./routers/product');
 const typeProductRouter = require('./routers/typeProduct');
 const orderRoutes = require('./routers/orderRoutes');
 const orderManagementRoutes = require('./routers/orderManagementRouter');
 const configRoutes = require('./routers/configRouter');
-// const fileUpload = require("express-fileupload");
+
 const app = express();
 
 app.use('/profile', productRouter);
 
 connectDB();
-
-// Configure CORS to allow HTTPS connections
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    
-    // Allow all origins in development
-    callback(null, true);
-  },
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
-// app.use(fileUpload());
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-// app.use(fileupload());
 
 // Serve uploaded images
 app.use('/uploads', express.static('uploads'));
@@ -51,7 +33,6 @@ app.use('/api/typeproduct/', typeProductRouter);
 app.use('/api/orders', orderRoutes);
 app.use('/ordermanagement', orderManagementRoutes);
 app.use('/api/config', configRoutes);
-// app.get("/", (req, res) => res.send("Hello all!"));
 
 // Serve React app from build folder
 app.use(express.static(path.join(__dirname, '../client/build')));
@@ -75,15 +56,13 @@ const getNetworkIP = () => {
 
 const PORT = process.env.PORT || 5000;
 const HTTPS_PORT = process.env.HTTPS_PORT || 5443;
-const USE_HTTPS = process.env.USE_HTTPS === 'true';
 const networkIP = getNetworkIP();
 
 // Check if SSL certificate files exist
 const sslKeyPath = path.join(__dirname, 'server.key');
 const sslCertPath = path.join(__dirname, 'server.cert');
-const sslFilesExist = fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath);
 
-if (USE_HTTPS && sslFilesExist) {
+if (fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
   // HTTPS Server Configuration
   const httpsOptions = {
     key: fs.readFileSync(sslKeyPath),
@@ -99,16 +78,7 @@ if (USE_HTTPS && sslFilesExist) {
     console.log(`\nNote: You may need to accept the self-signed certificate warning in your browser.`);
   });
 } else {
-  // HTTP Server (default)
-  if (USE_HTTPS && !sslFilesExist) {
-    console.warn('⚠ USE_HTTPS is set to true but SSL certificates not found!');
-    console.warn('⚠ Falling back to HTTP. See HTTPS_SETUP.md for certificate generation instructions.\n');
-  }
-  
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-    console.log(`Access from network at http://${networkIP}:${PORT}`);
-    console.log(`\nFor mobile devices, update client/.env with:`);
-    console.log(`REACT_APP_API_URL=http://${networkIP}:${PORT}`);
-  });
+  console.error('SSL certificate files not found!');
+  console.error('Please generate SSL certificates first. See HTTPS_SETUP.md for instructions.');
+  process.exit(1);
 }

@@ -89,6 +89,7 @@ const updateOrderStatus = async (req, res) => {
   const order = await Order.findById(req.params.id)
 
   if (order) {
+    const previousStatus = order.orderStatus
     order.orderStatus = status
 
     // Update timestamps based on status
@@ -100,8 +101,19 @@ const updateOrderStatus = async (req, res) => {
       order.isDelivered = true
       order.deliveredAt = Date.now()
     } else if (status === 'paid') {
+      // When changing to paid status, update paid/unpaid values
       order.isPaid = true
       order.paidAt = Date.now()
+      // Move unpaid amount to paid
+      order.paidValue += order.unpaidValue
+      order.unpaidValue = 0
+    } else if (previousStatus === 'paid' && status !== 'paid') {
+      // When changing from paid to another status, reverse the payment
+      order.isPaid = false
+      order.paidAt = null
+      // Move everything back to unpaid
+      order.unpaidValue = order.totalPrice
+      order.paidValue = 0
     }
 
     const updatedOrder = await order.save()
@@ -215,34 +227,38 @@ const updateOrderItems = async (req, res) => {
       
       // Update items if provided
       if (OrderItems) {
+        const oldTotalPrice = order.totalPrice
         const newTotalPrice = OrderItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
-        console.log('Old total price:', order.totalPrice, 'New total price:', newTotalPrice);
+        console.log('Old total price:', oldTotalPrice, 'New total price:', newTotalPrice);
+        
+        const priceDifference = newTotalPrice - oldTotalPrice
         
         order.OrderItems = OrderItems
         order.totalPrice = newTotalPrice
         
-        // Update unpaidValue: if order was paid, new items become unpaid
-        // unpaidValue = totalPrice - paidValue
-        order.unpaidValue = newTotalPrice - order.paidValue
-        console.log('Updated unpaidValue:', order.unpaidValue);
-      }
-      
-      // Update payment status if provided
-      if (isPaid !== undefined) {
-        if (isPaid && !order.isPaid) {
-          // Marking as paid: move unpaidValue to paidValue
-          order.paidValue += order.unpaidValue
-          order.unpaidValue = 0
-          console.log('Marked as paid. New paidValue:', order.paidValue);
-        } else if (!isPaid && order.isPaid) {
-          // Marking as unpaid: move everything to unpaidValue
-          order.unpaidValue = order.totalPrice
-          order.paidValue = 0
-          console.log('Marked as unpaid. New unpaidValue:', order.unpaidValue);
+        // If order status is 'paid' or order is marked as paid
+        if (order.orderStatus === 'paid' || order.isPaid) {
+          if (priceDifference > 0) {
+            // Items added: keep paidValue same, add difference to unpaidValue
+            order.unpaidValue += priceDifference
+            console.log('Items added to paid order. paidValue stays:', order.paidValue, 'unpaidValue increased by:', priceDifference);
+          } else if (priceDifference < 0) {
+            // Items removed: reduce paidValue, keep unpaidValue same
+            order.paidValue = Math.max(0, order.paidValue + priceDifference)
+            // Recalculate unpaidValue to ensure consistency
+            order.unpaidValue = newTotalPrice - order.paidValue
+            console.log('Items removed from paid order. paidValue reduced to:', order.paidValue);
+          }
+          order.isPaid = isPaid
+          order.paidAt = paidAt || (isPaid ? Date.now() : null)
+        } else {
+          // If not paid, recalculate unpaidValue
+          order.unpaidValue = newTotalPrice - order.paidValue
         }
-        order.isPaid = isPaid
-        order.paidAt = paidAt || (isPaid ? Date.now() : null)
+        console.log('Updated paidValue:', order.paidValue, 'unpaidValue:', order.unpaidValue);
       }
+  
+      
       
       const updatedOrder = await order.save()
       console.log('Order saved successfully:', updatedOrder);
