@@ -9,6 +9,11 @@ const OrderSchema = new Schema({
       price: { type: Number, required: true },
       img: { type: String },
       comment: { type: String },
+      status: { 
+        type: String, 
+        enum: ['not served', 'served'],
+        default: 'not served'
+      },
     },
   ],
   userName: {

@@ -1265,6 +1265,26 @@
   max-width: 300px;
 }
 
+/* Item Status Badges */
+.item-status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: white;
+  text-align: center;
+}
+
+.status-not-served {
+  background-color: #ff9800;
+}
+
+.status-served {
+  background-color: #4caf50;
+}
+
 /* Order Status Colors */
 .order-status-dropdown {
   padding: 6px 12px;

@@ -305,6 +305,7 @@ export default function DetailRevenue(props) {
                                                 <th>Item Name</th>
                                                 <th>Quantity</th>
                                                 <th>Price</th>
+                                                <th>Status</th>
                                                 <th>Comments</th>
                                             </tr>
                                         </thead>
@@ -321,6 +322,11 @@ export default function DetailRevenue(props) {
                                                     <td className="item-name">{item.name}</td>
                                                     <td className="item-quantity">x{item.quantity}</td>
                                                     <td className="item-price">€{(item.price * item.quantity).toLocaleString()}</td>
+                                                    <td>
+                                                        <span className={`item-status-badge ${item.status === 'served' ? 'status-served' : 'status-not-served'}`}>
+                                                            {item.status || 'not served'}
+                                                        </span>
+                                                    </td>
                                                     <td className="item-comment">{item.comment || '-'}</td>
                                                 </tr>
                                             ))}

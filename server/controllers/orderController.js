@@ -11,8 +11,14 @@ const addOrderItems = async (req, res) => {
     throw new Error('No order items')
     return
   } else {
+    // Ensure all new items have 'not served' status
+    const itemsWithStatus = OrderItems.map(item => ({
+      ...item,
+      status: item.status || 'not served'
+    }));
+    
     const order = new Order({
-      OrderItems,
+      OrderItems: itemsWithStatus,
       usingMethod,
       totalPrice,
       unpaidValue: totalPrice,
@@ -102,6 +108,12 @@ const updateOrderStatus = async (req, res) => {
     } else if (status === 'delivered') {
       order.isDelivered = true
       order.deliveredAt = Date.now()
+    } else if (status === 'completed') {
+      // Mark all order items as served when order is completed
+      order.OrderItems = order.OrderItems.map(item => ({
+        ...item.toObject(),
+        status: 'served'
+      }));
     } else if (status === 'paid') {
       // When changing to paid status, update paid/unpaid values
       order.isPaid = true
@@ -233,7 +245,13 @@ const updateOrderItems = async (req, res) => {
         
         const priceDifference = newTotalPrice - oldTotalPrice
         
-        order.OrderItems = OrderItems
+        // Ensure all items have status, new items default to 'not served'
+        const itemsWithStatus = OrderItems.map(item => ({
+          ...item,
+          status: item.status || 'not served'
+        }));
+        
+        order.OrderItems = itemsWithStatus
         order.totalPrice = newTotalPrice
         
         // If order status is 'paid' or order is marked as paid

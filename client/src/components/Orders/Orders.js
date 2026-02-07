@@ -514,6 +514,9 @@ const Orders = () => {
                               )}
                               <div className="item-details">
                                 <p className="item-name">{item.name}</p>
+                                <span className={`item-status-badge ${item.status === 'served' ? 'status-served' : 'status-not-served'}`}>
+                                  {item.status || 'not served'}
+                                </span>
                                 <div className="quantity-control">
                                   <button 
                                     className="qty-btn"
@@ -669,6 +672,9 @@ const Orders = () => {
                             <div className="item-details">
                               <p className="item-name">{item.name}</p>
                               <p className="item-quantity">Qty: {item.quantity}</p>
+                              <span className={`item-status-badge ${item.status === 'served' ? 'status-served' : 'status-not-served'}`}>
+                                {item.status || 'not served'}
+                              </span>
                               {item.comment && (
                                 <p className="item-comment">Note: {item.comment}</p>
                               )}
