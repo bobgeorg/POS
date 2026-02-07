@@ -6,7 +6,7 @@ import { Container, Row, Col } from 'react-grid-system';
 import DetailRevenue from "./DetailRevenue";
 import axios from "axios";
 import API_BASE_URL from "../../config/api";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaSyncAlt } from "react-icons/fa";
 import { BiRestaurant } from "react-icons/bi";
 import useMountTransition from "./useMountTransition";
 
@@ -52,21 +52,32 @@ export default function OrderManagement() {
     const [show, setshow] = useState(false);
     const [current, setCurrent] = React.useState("");
     const [checked, setChecked] = React.useState(-1);
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
     const hasTransitionedIn = useMountTransition(show, 1000);
     
     const fetchOrders = async (date) => {
         try {
+            setIsRefreshing(true);
             const response = await axios.get(`${API_BASE_URL}/ordermanagement/order`, {
                 params: { date }
             });
             setOrder(response.data);
         } catch (error) {
             console.error('Error fetching orders:', error);
+        } finally {
+            setIsRefreshing(false);
         }
+    };
+
+    const handleRefresh = () => {
+        fetchOrders(selectedDate);
     };
 
     React.useEffect(() => {
         fetchOrders(selectedDate);
+        // Auto-refresh every 30 seconds
+        const interval = setInterval(() => fetchOrders(selectedDate), 30000);
+        return () => clearInterval(interval);
     }, [selectedDate]);
     
     if (!Orders) return null;
@@ -94,8 +105,15 @@ export default function OrderManagement() {
                   </div>
                 </Col>
                 <Col lg={3}>
-                  {" "}
-                  {/* <SearchAccount /> */}
+                  <button 
+                    className="refresh-button" 
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
+                    title="Refresh orders"
+                  >
+                    <FaSyncAlt className={`refresh-icon ${isRefreshing ? 'spinning' : ''}`} />
+                    {isRefreshing ? 'Refreshing...' : 'Refresh'}
+                  </button>
                 </Col>
               </Row>
             </Container>
@@ -143,9 +161,7 @@ export default function OrderManagement() {
                         {renderSwitch(checked, current)}
                     </div>
                     <div className="Total">Total Revenue: €{
-                        Orders.reduce((sum, i) => (
-                            sum += (i.orderStatus === 'paid' || i.orderStatus === 'completed') ? i.totalPrice : 0
-                        ), 0).toLocaleString()
+                        Orders.reduce((sum, i) => sum + (i.paidValue || 0), 0).toLocaleString()
                     }</div> 
                 </div>
         </div>

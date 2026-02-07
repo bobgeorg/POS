@@ -28,8 +28,7 @@ const Orders = () => {
   const [products, setProducts] = useState([]);
   const [showAddItem, setShowAddItem] = useState(false);
   const [selectedDate, setSelectedDate] = useState(() => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
+    return new Date().toISOString().split('T')[0];
   });
 
   useEffect(() => {
@@ -151,7 +150,7 @@ const Orders = () => {
       }
       
       setEditingOrder(null);
-      fetchOrders();
+      fetchOrders(selectedDate);
       
       const statusMessage = order.orderStatus === 'completed' ? ' Order status changed to pending.' : '';
       showNotification('Success!', `Your order has been updated successfully!${statusMessage}`, 'success');
@@ -206,7 +205,7 @@ const Orders = () => {
           await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, {
             status: 'cancelled'
           });
-          fetchOrders();
+          fetchOrders(selectedDate);
           showNotification('Order Cancelled', 'Your order has been cancelled successfully.', 'success');
         } catch (error) {
           console.error('Error cancelling order:', error);
@@ -225,7 +224,7 @@ const Orders = () => {
       async () => {
         try {
           await axios.delete(`${API_BASE_URL}/api/orders/${orderId}`);
-          fetchOrders();
+          fetchOrders(selectedDate);
           showNotification('Order Deleted', 'The order has been permanently deleted.', 'success');
         } catch (error) {
           console.error('Error deleting order:', error);
@@ -242,7 +241,7 @@ const Orders = () => {
       await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, {
         status: 'pending'
       });
-      fetchOrders();
+      fetchOrders(selectedDate);
       showNotification('Order Restored', 'The order has been restored to pending status.', 'success');
     } catch (error) {
       console.error('Error restoring order:', error);
@@ -257,7 +256,7 @@ const Orders = () => {
       await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, {
         status: 'paid'
       });
-      fetchOrders();
+      fetchOrders(selectedDate);
       showNotification('Order Paid', 'The order has been marked as paid.', 'success');
     } catch (error) {
       console.error('Error marking order as paid:', error);
@@ -272,7 +271,7 @@ const Orders = () => {
       await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, {
         status: 'completed'
       });
-      fetchOrders();
+      fetchOrders(selectedDate);
       showNotification('Order Completed', 'The order has been marked as completed.', 'success');
     } catch (error) {
       console.error('Error marking order as completed:', error);
@@ -637,7 +636,7 @@ const Orders = () => {
                                   <FaTimes /> Cancel Order
                                 </button>
                               )}
-                              {(order.orderStatus === 'ready' || order.orderStatus === 'pending') && (
+                              {(order.orderStatus === 'ready' || order.orderStatus === 'completed') && (
                                 <button 
                                   className="paid-order-btn"
                                   onClick={(e) => handleMarkAsPaid(e, order._id)}

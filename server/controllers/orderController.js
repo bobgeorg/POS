@@ -52,6 +52,8 @@ const updateOrderToPaid = async (req, res) => {
   if (order) {
     order.isPaid = true
     order.paidAt = Date.now()
+    order.paidValue = order.totalPrice
+    order.unpaidValue = 0
     const updatedOrder = await order.save()
 
     res.json(updatedOrder)
@@ -110,10 +112,8 @@ const updateOrderStatus = async (req, res) => {
     } else if (previousStatus === 'paid' && status !== 'paid') {
       // When changing from paid to another status, reverse the payment
       order.isPaid = false
-      order.paidAt = null
       // Move everything back to unpaid
-      order.unpaidValue = order.totalPrice
-      order.paidValue = 0
+      order.unpaidValue = order.totalPrice - order.paidValue
     }
 
     const updatedOrder = await order.save()
@@ -241,18 +241,22 @@ const updateOrderItems = async (req, res) => {
           if (priceDifference > 0) {
             // Items added: keep paidValue same, add difference to unpaidValue
             order.unpaidValue += priceDifference
+            order.isPaid = false
+            order.orderStatus = 'pending'
             console.log('Items added to paid order. paidValue stays:', order.paidValue, 'unpaidValue increased by:', priceDifference);
           } else if (priceDifference < 0) {
             // Items removed: reduce paidValue, keep unpaidValue same
             order.paidValue = Math.max(0, order.paidValue + priceDifference)
             // Recalculate unpaidValue to ensure consistency
             order.unpaidValue = newTotalPrice - order.paidValue
+            order.isPaid = true
             console.log('Items removed from paid order. paidValue reduced to:', order.paidValue);
           }
-          order.isPaid = isPaid
+          //order.isPaid = isPaid
           order.paidAt = paidAt || (isPaid ? Date.now() : null)
         } else {
           // If not paid, recalculate unpaidValue
+          order.isPaid = false
           order.unpaidValue = newTotalPrice - order.paidValue
         }
         console.log('Updated paidValue:', order.paidValue, 'unpaidValue:', order.unpaidValue);
