@@ -69,7 +69,7 @@ const ListProducts = () => {
               All
             </button>
             {typeProducts.map((typeProduct, index) => {
-              if (index !== 0)
+              if (index !== -1)
                 return (
                   <button
                     key={index}

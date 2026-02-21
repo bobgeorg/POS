@@ -51,9 +51,7 @@ const AddModal = () => {
       newProduct.img === "" ||
       newProduct.name === "" ||
       newProduct.catelory === "" ||
-      newProduct.description === "" ||
-      newProduct.price === 0 ||
-      newProduct.count === 0
+      newProduct.price === 0 
     ) {
       swal(
         "Please Fill Correctly",
@@ -143,7 +141,7 @@ const AddModal = () => {
                     Choose here
                   </option>
                   {typeProducts.map((typeProduct, index) => {
-                    if (index !== 0)
+                    if (index !== -1)
                       return (
                         <option value={typeProduct._id}>
                           {typeProduct.name}
