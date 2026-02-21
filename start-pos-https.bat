@@ -10,6 +10,19 @@ echo.
 echo Starting POS Server with HTTPS...
 cd /d "%~dp0"
 
+set FORCE_CLIENT_BUILD=0
+for %%a in (%*) do (
+    if /i "%%a"=="--build-client" set FORCE_CLIENT_BUILD=1
+    if /i "%%a"=="--force-build" set FORCE_CLIENT_BUILD=1
+    if /i "%%a"=="/build-client" set FORCE_CLIENT_BUILD=1
+    if /i "%%a"=="/force-build" set FORCE_CLIENT_BUILD=1
+)
+
+if "%FORCE_CLIENT_BUILD%"=="1" (
+    echo Forcing client build on startup.
+    set FORCE_CLIENT_BUILD=1
+)
+
 REM Set HTTPS environment variable for this session
 set USE_HTTPS=true
 

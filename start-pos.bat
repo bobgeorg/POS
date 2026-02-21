@@ -10,6 +10,19 @@ echo.
 echo Checking configuration...
 cd /d "%~dp0"
 
+set FORCE_CLIENT_BUILD=0
+for %%a in (%*) do (
+    if /i "%%a"=="--build-client" set FORCE_CLIENT_BUILD=1
+    if /i "%%a"=="--force-build" set FORCE_CLIENT_BUILD=1
+    if /i "%%a"=="/build-client" set FORCE_CLIENT_BUILD=1
+    if /i "%%a"=="/force-build" set FORCE_CLIENT_BUILD=1
+)
+
+if "%FORCE_CLIENT_BUILD%"=="1" (
+    echo Forcing client build on startup.
+    set FORCE_CLIENT_BUILD=1
+)
+
 REM Check if HTTPS is enabled in .env file
 set USE_HTTPS=false
 set PORT=5000

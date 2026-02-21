@@ -6,6 +6,14 @@ const clientPath = path.join(__dirname, 'client');
 const buildPath = path.join(clientPath, 'build');
 const srcPath = path.join(clientPath, 'src');
 
+const forceBuild = hasForceBuildFlag();
+
+if (forceBuild) {
+    console.log('Force build requested. Building client...');
+    buildClient();
+    process.exit(0);
+}
+
 // Check if build directory exists
 if (!fs.existsSync(buildPath)) {
     console.log('Build folder not found. Building client...');
@@ -70,4 +78,14 @@ function buildClient() {
         console.error('Build failed:', error.message);
         process.exit(1);
     }
+}
+
+function hasForceBuildFlag() {
+    if (process.env.FORCE_CLIENT_BUILD === '1' || process.env.FORCE_CLIENT_BUILD === 'true') {
+        return true;
+    }
+
+    return process.argv.includes('--force-build') ||
+        process.argv.includes('--build-client') ||
+        process.argv.includes('--force');
 }
